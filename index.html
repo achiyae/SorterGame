@@ -14,12 +14,11 @@
             padding: 20px;
         }
 
-        #bowel {
+        .bowel {
             bottom: 10px;
             border-left: black solid 2px;
             border-right: black solid 2px;
             border-bottom: black solid 2px;
-            left: 50%;
             width: 300px;
             height: 100px;
             display: flex;
@@ -27,13 +26,14 @@
         }
 
         #robotic-arm {
-            position: absolute;
-            top: 180px;
+            position: relative;
+            top: -40px;
             left: 50%;
-            transform: translateX(-50%);
+            /*transform: translateX(-50%);*/
             width: 10px;
             height: 30px;
             background-color: gray; /* Just a placeholder color */
+            transition: transform 1s;
         }
 
         .button {
@@ -72,12 +72,24 @@
             background-color: red;
         }
 
+        .red-b {
+            border-color: red;
+        }
+
         .green {
             background-color: green;
         }
 
+        .green-b {
+            border-color: green;
+        }
+
         .blue {
             background-color: blue;
+        }
+
+        .blue-b {
+            border-color: blue;
         }
     </style>
 </head>
@@ -86,7 +98,7 @@
     <button class="button green" onclick=""></button>
     <button class="button blue" onclick=""></button>
     <button class="button red" onclick="move('red')"></button>
-    <div id="bowel">
+    <div class="bowel">
         <div id="robotic-arm"></div>
         <div class="block green"></div>
         <div class="block blue"></div>
@@ -103,17 +115,36 @@
         <div class="block red"></div>
         <div class="block blue"></div>
     </div>
+    <div style="width: 20px;"></div>
+    <div class="bowel red-b" style="width: 80px; height: 30px"></div>
+    <div style="width: 20px;"></div>
+    <div class="bowel blue-b" style="width: 80px; height: 30px"></div>
+    <div style="width: 20px;"></div>
+    <div class="bowel green-b" style="width: 80px; height: 30px"></div>
 </div>
 <script>
   function move(color) {
-    var roboticArm = document.getElementById("robotic-arm");
-    var redBlocks = document.getElementsByClassName("block "+color);
+    var roboticArm = document.getElementById('robotic-arm')
+    var blocks = document.getElementsByClassName('block ' + color)
+    var coloredBowel = document.getElementsByClassName('bowel ' + color + '-b')
 
-    if (redBlocks.length > 0) {
-      var firstRedBlock = redBlocks[0];
-      console.log(firstRedBlock.getBoundingClientRect().left);
-      roboticArm.style.left = firstRedBlock.getBoundingClientRect().left+'px';
-      roboticArm.style.top = (firstRedBlock.getBoundingClientRect().top-40)+'px';
+    if (blocks.length > 0) {
+      var firstBlock = blocks[0]
+      var blockLeft = firstBlock.offsetLeft - roboticArm.offsetLeft
+      var blockTop = firstBlock.offsetTop - roboticArm.offsetTop - 30
+      var bowelLeft = coloredBowel[0].offsetLeft - roboticArm.offsetLeft + 10
+      var bowelTop = coloredBowel[0].offsetTop - roboticArm.offsetTop - 30
+
+      roboticArm.style.transform = 'translateX(' + blockLeft + 'px)'
+      setTimeout(function () {
+        roboticArm.style.transform = 'translate(' + blockLeft + 'px, ' + blockTop + 'px)'
+        setTimeout(function () {
+          roboticArm.style.transform = 'translate(' + blockLeft + 'px, 0px)'
+          setTimeout(function () {
+            roboticArm.style.transform = 'translate(' + bowelLeft + 'px, 0px)'
+          }, 1000)
+        }, 1000)
+      }, 1000)
     }
   }
 </script>
