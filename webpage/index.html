@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sorting game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <button class="green" onclick="move('green')"></button>
+    <button class="blue" onclick="move('blue')"></button>
+    <button class="red" onclick="move('red')"></button>
+    <div class="bowel">
+        <div id="robot">
+            <div id="robotic-arm"></div>
+            <div id="robot-block" class="block transparent"></div>
+        </div>
+        <div class="block green"></div>
+        <div class="block blue"></div>
+        <div class="block red"></div>
+        <div class="block green"></div>
+        <div class="block red"></div>
+        <div class="block red"></div>
+        <div class="block blue"></div>
+        <div class="block red"></div>
+        <div class="block green"></div>
+        <div class="block green"></div>
+        <div class="block blue"></div>
+        <div class="block blue"></div>
+        <div class="block red"></div>
+        <div class="block blue"></div>
+    </div>
+    <div style="width: 20px;"></div>
+    <div class="pile red-b">
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div id="red-counter" class="counter">0</div>
+    </div>
+    <div style="width: 20px;"></div>
+    <div class="pile blue-b">
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div id="blue-counter" class="counter">0</div>
+    </div>
+    <div style="width: 20px;"></div>
+    <div class="pile green-b">
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div id="green-counter" class="counter">0</div>
+    </div>
+</div>
+<div class="container" style="height: 150px; border: transparent; background: transparent">
+    <div class="side-panel">
+        <h2>Actuators</h2>
+        <table>
+            <tr>
+                <td>Magnet:</td>
+                <td><p id="robot-value-magnet" style="background: transparent; border: black solid 1px; text-align: center">Off</p></td>
+            </tr>
+            <tr>
+                <td>H-Motor:</td>
+                <td><span id="robot-value-motor-h">0</span> cm/sec</td>
+            </tr>
+            <tr>
+                <td>V-Motor:</td>
+                <td><span id="robot-value-motor-v">0</span> cm/sec</td>
+            </tr>
+        </table>
+    </div>
+    <div style="width: 20px;"></div>
+    <div class="side-panel">
+        <h2>Sensors</h2>
+        <table>
+            <tr>
+                <td>Color:</td>
+                <td><p class="block red"></p></td>
+            </tr>
+        </table>
+    </div>
+    <div style="width: 20px;"></div>
+    <div class="side-panel">
+        <h2>Debug</h2>
+        <table>
+            <tr>
+                <td>Location X:</td>
+                <td id="robot-value-x">-</td>
+            </tr>
+            <tr>
+                <td>Location Y:</td>
+                <td id="robot-value-y">-</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="script.js"></script>
+</body>
+</html>
