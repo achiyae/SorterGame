@@ -1,3 +1,4 @@
+const DURATION = 500
 function updateRobotLocation() {
     $('#robot-value-x').text(Math.round($('#robot').offset().left))
     $('#robot-value-y').text(Math.round($('#robot').offset().top))
@@ -38,7 +39,7 @@ function move(color) {
         $("#robot")
             .animate({left: "+=" + blockLeft + "px",},
                 {
-                    duration: 1000,
+                    duration: DURATION,
                     step: function (now, tween) {
                         updateRobotLocation()
                     },
@@ -51,7 +52,7 @@ function move(color) {
                 })
             .animate({top: "+=" + blockTop + "px",},
                 {
-                    duration: 1000,
+                    duration: DURATION,
                     step: function (now, tween) {
                         updateRobotLocation()
                     },
@@ -67,7 +68,7 @@ function move(color) {
                 })
             .animate({top: "-40px",},
                 {
-                    duration: 1000,
+                    duration: DURATION,
                     step: function (now, tween) {
                         updateRobotLocation()
                     },
@@ -80,7 +81,7 @@ function move(color) {
                 })
             .animate({left: "+=" + pileLeft + "px",},
                 {
-                    duration: 1000,
+                    duration: DURATION,
                     step: function (now, tween) {
                         updateRobotLocation()
                     },
@@ -93,7 +94,7 @@ function move(color) {
                 })
             .animate({top: "+=" + pileTop + "px",},
                 {
-                    duration: 1000,
+                    duration: DURATION,
                     step: function (now, tween) {
                         updateRobotLocation()
                     },
@@ -111,7 +112,7 @@ function move(color) {
                 })
             .animate({top: "-40px",},
                 {
-                    duration: 1000,
+                    duration: DURATION,
                     step: function (now, tween) {
                         updateRobotLocation()
                     },
@@ -124,7 +125,7 @@ function move(color) {
                 })
             .animate({left: "50%",},
                 {
-                    duration: 1000,
+                    duration: DURATION,
                     step: function (now, tween) {
                         updateRobotLocation()
                     },
@@ -137,9 +138,9 @@ function move(color) {
                 })
     } else {
         $("#robot")
-            .animate({left: "-1000px",},
+            .animate({left: "-DURATIONpx",},
                 {
-                    duration: 1000,
+                    duration: DURATION,
                     step: function (now, tween) {
                         updateRobotLocation()
                     }
