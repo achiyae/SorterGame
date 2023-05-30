@@ -3,7 +3,7 @@
 <head>
     <title>Sorting game</title>
     <style>
-        #container {
+        .container {
             border: black solid 2px;
             display: flex;
             flex-direction: row;
@@ -67,7 +67,7 @@
             background-color: gray;
         }
 
-        .button {
+        button {
             color: white;
             /*border: none;*/
             margin: 10px;
@@ -80,15 +80,14 @@
             border-radius: 70%;
         }
 
-        .button:active {
+        button:active {
             box-shadow: 0 0 2px darkslategray;
             transform: translateY(2px);
         }
 
-        .button:not(:first-child) {
+        button:not(:first-child) {
             margin-top: 10px;
         }
-
 
         .block {
             width: 10px;
@@ -133,13 +132,31 @@
         .blue-b {
             border-color: blue;
         }
+
+        .side-panel {
+            width: 130px;
+            height: 110px;
+            align-items: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border: black solid 2px;
+        }
+
+        .side-panel h2 {
+            margin: 0 0 10px;
+        }
+
+        .side-panel p {
+            margin: 0;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
-<div id="container">
-    <button class="button green" onclick="move('green')"></button>
-    <button class="button blue" onclick="move('blue')"></button>
-    <button class="button red" onclick="move('red')"></button>
+<div class="container">
+    <button class="green" onclick="move('green')"></button>
+    <button class="blue" onclick="move('blue')"></button>
+    <button class="red" onclick="move('red')"></button>
     <div class="bowel">
         <div id="robot">
             <div id="robotic-arm"></div>
@@ -188,6 +205,49 @@
         <div id="green-counter" class="counter">0</div>
     </div>
 </div>
+<div class="container" style="height: 150px; border: transparent; background: transparent">
+    <div class="side-panel">
+        <h2>Actuators</h2>
+        <table>
+            <tr>
+                <td>Magnet:</td>
+                <td><p style="background: transparent; border: black solid 1px; text-align: center">Off</p></td>
+            </tr>
+            <tr>
+                <td>H-Motor:</td>
+                <td><span>0</span> cm/sec</td>
+            </tr>
+            <tr>
+                <td>V-Motor:</td>
+                <td><span>0</span> cm/sec</td>
+            </tr>
+        </table>
+    </div>
+    <div style="width: 20px;"></div>
+    <div class="side-panel">
+        <h2>Sensors</h2>
+        <table>
+            <tr>
+                <td>Color:</td>
+                <td><p class="block red"></p></td>
+            </tr>
+        </table>
+    </div>
+    <div style="width: 20px;"></div>
+    <div class="side-panel">
+        <h2>Debug</h2>
+        <table>
+            <tr>
+                <td>Location X:</td>
+                <td id="robot-value-x">-</td>
+            </tr>
+            <tr>
+                <td>Location Y:</td>
+                <td id="robot-value-y">-</td>
+            </tr>
+        </table>
+    </div>
+</div>
 <script>
   function move(color) {
     var robot = document.getElementById('robot')
@@ -234,6 +294,39 @@
       robot.style.transform = 'translateX(-700px)'
     }
   }
+</script>
+<script>
+  var robot = document.getElementById('robot')
+  var initRobotPosition = getOffset(robot)
+  var robotValueX = document.getElementById('robot-value-x')
+  var robotValueY = document.getElementById('robot-value-y')
+
+  function updateRobotLocation(style) {
+    var x = style.left - initRobotPosition.left
+    var y = style.top - initRobotPosition.top
+    robotValueX.textContent = x + ''
+    robotValueY.textContent = y + ''
+  }
+
+  var observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+        console.log(m.attributeName +
+            " -- old:" + m.oldValue +
+            ", new: " + m.target.getAttribute(m.attributeName));
+      updateRobotLocation(m.target.getAttribute(m.attributeName))
+    })
+  })
+
+  function getOffset(el) {
+    const rect = el.getBoundingClientRect()
+    return {
+      left: Math.round(rect.left + window.scrollX),
+      top: Math.round(rect.top + window.scrollY)
+    }
+  }
+
+
+  observer.observe(robot, { attributes: true, attributeFilter: ['offsetLeft, offsetTop'], attributeOldValue: true })
 </script>
 </body>
 </html>
