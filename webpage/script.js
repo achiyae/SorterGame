@@ -1,5 +1,3 @@
-var initRobotOffset = $('#robot').offset()
-
 function updateRobotLocation() {
     $('#robot-value-x').text(Math.round($('#robot').offset().left))
     $('#robot-value-y').text(Math.round($('#robot').offset().top))
@@ -35,7 +33,7 @@ function move(color) {
         var blockLeft = firstBlock.offsetLeft - robot.offsetLeft
         var blockTop = firstBlock.offsetTop - robot.offsetTop - 31
         var pileLeft = coloredPile.offsetLeft - firstBlock.offsetLeft + 7
-        var pileTop = lastTransparentBlock.offsetTop - robot.offsetTop - 32 - 1 * count
+        var pileTop = lastTransparentBlock.offsetTop - robot.offsetTop - 32 - count
 
         $("#robot")
             .animate({left: "+=" + blockLeft + "px",},
@@ -149,4 +147,8 @@ function move(color) {
     }
 }
 
-updateRobotLocation()
+$( document ).ready(function() {
+    updateRobotLocation()
+    updateRobotEngine()
+    updateRobotMagnet()
+})
