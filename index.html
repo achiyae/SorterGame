@@ -22,18 +22,49 @@
             width: 300px;
             height: 100px;
             display: flex;
+            flex-shrink: 0;
             justify-content: space-between;
         }
 
-        #robotic-arm {
+        .pile {
+            bottom: 10px;
+            border-left: black solid 2px;
+            border-right: black solid 2px;
+            border-bottom: black solid 2px;
+            width: 20px;
+            height: 70px;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+        }
+
+        .pile-block {
+            width: 10px;
+            height: 10px;
+            margin-bottom: 1px;
+            flex-shrink: 0;
+        }
+
+        .counter {
+            position: absolute;
+            top: 328px;
+            width: inherit;
+            text-align: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        #robot {
             position: relative;
             top: -40px;
             left: 50%;
-            /*transform: translateX(-50%);*/
+            transition: transform 1s;
+        }
+
+        #robotic-arm {
             width: 10px;
             height: 30px;
-            background-color: gray; /* Just a placeholder color */
-            transition: transform 1s;
+            background-color: gray;
         }
 
         .button {
@@ -65,11 +96,20 @@
             margin-top: 88px;
             margin-left: 1px;
             margin-right: 1px;
-            border: black solid 1px;
+        }
+
+        #robot .block {
+            margin-top: 1px;
+            margin-left: -1px;
+        }
+
+        .transparent {
+            background-color: transparent;
         }
 
         .red {
             background-color: red;
+            border: black solid 1px;
         }
 
         .red-b {
@@ -78,6 +118,7 @@
 
         .green {
             background-color: green;
+            border: black solid 1px;
         }
 
         .green-b {
@@ -86,6 +127,7 @@
 
         .blue {
             background-color: blue;
+            border: black solid 1px;
         }
 
         .blue-b {
@@ -95,11 +137,14 @@
 </head>
 <body>
 <div id="container">
-    <button class="button green" onclick=""></button>
-    <button class="button blue" onclick=""></button>
+    <button class="button green" onclick="move('green')"></button>
+    <button class="button blue" onclick="move('blue')"></button>
     <button class="button red" onclick="move('red')"></button>
     <div class="bowel">
-        <div id="robotic-arm"></div>
+        <div id="robot">
+            <div id="robotic-arm"></div>
+            <div id="robot-block" class="block transparent"></div>
+        </div>
         <div class="block green"></div>
         <div class="block blue"></div>
         <div class="block red"></div>
@@ -116,35 +161,77 @@
         <div class="block blue"></div>
     </div>
     <div style="width: 20px;"></div>
-    <div class="bowel red-b" style="width: 80px; height: 30px"></div>
+    <div class="pile red-b">
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div id="red-counter" class="counter">0</div>
+    </div>
     <div style="width: 20px;"></div>
-    <div class="bowel blue-b" style="width: 80px; height: 30px"></div>
+    <div class="pile blue-b">
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div id="blue-counter" class="counter">0</div>
+    </div>
     <div style="width: 20px;"></div>
-    <div class="bowel green-b" style="width: 80px; height: 30px"></div>
+    <div class="pile green-b">
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div class="pile-block transparent"></div>
+        <div id="green-counter" class="counter">0</div>
+    </div>
 </div>
 <script>
   function move(color) {
-    var roboticArm = document.getElementById('robotic-arm')
+    var robot = document.getElementById('robot')
+    var robotBlock = document.getElementById('robot-block')
     var blocks = document.getElementsByClassName('block ' + color)
-    var coloredBowel = document.getElementsByClassName('bowel ' + color + '-b')
+    var coloredPile = document.getElementsByClassName('pile ' + color + '-b')[0]
+    var counter = document.getElementById(color + '-counter')
+    var lastTransparentBlock = coloredPile.querySelectorAll('.pile-block.transparent')[0]
+    var count = parseInt(counter.innerHTML)
 
     if (blocks.length > 0) {
       var firstBlock = blocks[0]
-      var blockLeft = firstBlock.offsetLeft - roboticArm.offsetLeft
-      var blockTop = firstBlock.offsetTop - roboticArm.offsetTop - 30
-      var bowelLeft = coloredBowel[0].offsetLeft - roboticArm.offsetLeft + 10
-      var bowelTop = coloredBowel[0].offsetTop - roboticArm.offsetTop - 30
+      var blockLeft = firstBlock.offsetLeft - robot.offsetLeft
+      var blockTop = firstBlock.offsetTop - robot.offsetTop - 30
+      var pileLeft = coloredPile.offsetLeft - robot.offsetLeft + 7
+      var pileTop = lastTransparentBlock.offsetTop - robot.offsetTop - 32 - 1 * count
 
-      roboticArm.style.transform = 'translateX(' + blockLeft + 'px)'
+      robot.style.transform = 'translateX(' + blockLeft + 'px)'
       setTimeout(function () {
-        roboticArm.style.transform = 'translate(' + blockLeft + 'px, ' + blockTop + 'px)'
+        robot.style.transform = 'translate(' + blockLeft + 'px, ' + blockTop + 'px)'
         setTimeout(function () {
-          roboticArm.style.transform = 'translate(' + blockLeft + 'px, 0px)'
+          firstBlock.className = 'block transparent'
+          robotBlock.className = 'block ' + color
+          robot.style.transform = 'translate(' + blockLeft + 'px, 0px)'
           setTimeout(function () {
-            roboticArm.style.transform = 'translate(' + bowelLeft + 'px, 0px)'
+            robot.style.transform = 'translate(' + pileLeft + 'px, 0px)'
+            setTimeout(function () {
+              robot.style.transform = 'translate(' + pileLeft + 'px, ' + pileTop + 'px)'
+              setTimeout(function () {
+                robot.style.transform = 'translate(' + pileLeft + 'px, 0)'
+                setTimeout(function () {
+                  robot.style.transform = 'translate(0,0)'
+                }, 1000)
+                robotBlock.className = 'block transparent'
+                lastTransparentBlock.className = 'pile-block ' + color
+                count++
+                counter.innerHTML = count.toString()
+              }, 1000)
+            }, 1000)
           }, 1000)
         }, 1000)
       }, 1000)
+    } else {
+      robot.style.transform = 'translateX(-700px)'
     }
   }
 </script>
