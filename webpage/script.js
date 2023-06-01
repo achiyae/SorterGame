@@ -118,7 +118,7 @@ function findColor(color, queue) {
     let options = [
         {queue: queue}, {queue: queue}, {
             queue: queue,
-            duration: DURATION * 5,
+            duration: DURATION * 6,
             step: function (now, tween) {
                 if (first.length > 0) {
                     let blockLeft = Math.floor(first.offset().left)
