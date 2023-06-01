@@ -39,77 +39,136 @@ function animateKeyframe(isRelative, left, top) {
     }
 }
 
+function updateRobotSensors() {
+
+}
+
 function animateOptions(left, top, options) {
     if (!options) options = {}
-    let ans = {
-        duration: options.duration || DURATION,
-        step: options.step || function (now, tween) {
-            updateRobotLocation()
-        },
-        start: options.start || function () {
-            if (left != null)
-                updateRobotEngine(left < 0 ? -10 : 10, 0)
-            else if (top != null)
-                updateRobotEngine(0, top < 0 ? -10 : 10)
-        },
-        complete: options.complete || function () {
-            updateRobotEngine(0, 0)
-        },
-        progress: options.progress || null,
+    options.duration = options.duration || DURATION
+    options.step = options.step || function (now, tween) {
+        updateRobotLocation()
+        updateRobotSensors()
     }
-
-    return ans
+    options.start = options.start || function () {
+        if (left != null)
+            updateRobotEngine(left < 0 ? -10 : 10, 0)
+        else if (top != null)
+            updateRobotEngine(0, top < 0 ? -10 : 10)
+    }
+    options.complete = options.complete || function () {
+        updateRobotEngine(0, 0)
+    }
+    return options
 }
 
 
-function findColor(color) {
-    let queue = 'findColor-' + Math.random()
-    let bowel = $('.bowel')
+function hitTheWall(queue) {
+    if (queue == null) queue = 'findColor-' + Math.random()
     let robot = $('#robot')
-    let firstScanLocation = {
-        left: bowel.offset().left - robot.offset().left + 1,
-        top: bowel.height() - 7
+    let locations = []
+    for (let i = 0; i < 500; i++) {
+        locations.push({left: -30})
+        locations.push({left: 30})
     }
-    robot
-        .animate(animateKeyframe(true, firstScanLocation.left, null), animateOptions(firstScanLocation.left, null, {queue: queue}))
-        .animate(animateKeyframe(true, null, firstScanLocation.top), animateOptions(null, firstScanLocation.top, {queue: queue}))
-        .animate(animateKeyframe(true, bowel.width() - 11, null),
-            animateOptions(bowel.width() - 11, null, {
-                queue: queue,
-                duration: DURATION * 5,
-                step: function (now, tween) {
-                    if (Math.floor($('.block.' + color + ':first').offset().left) === Math.floor(robot.offset().left + 2)) {
-                        console.log('found')
+    for (let i = 0; i < locations.length; i++) {
+        let location = locations[i]
+        robot
+            .animate(animateKeyframe(true, location.left, null), animateOptions(location.left, null, {queue: queue}))
+    }
+    robot.dequeue(queue)
+}
+
+function findColor(color, queue) {
+    if (queue == null) queue = 'findColor-' + Math.random()
+    let bowel = $('#bowel')
+    let robot = $('#robot')
+    let first = $('.block.bowel.' + color + ':first')
+    let locations = [
+        {left: bowel.offset().left - robot.offset().left + 2},
+        {top: bowel.height() - 7},
+        {left: bowel.width() - 11}
+    ]
+    let options = [
+        {queue: queue}, {queue: queue}, {
+            queue: queue,
+            duration: DURATION * 5,
+            step: function (now, tween) {
+                if (first.length > 0) {
+                    let blockLeft = Math.floor(first.offset().left)
+                    let robotLeft = Math.floor(robot.offset().left)
+                    if (blockLeft >= robotLeft - 2 && blockLeft <= robotLeft + 2) {
                         robot.stop(true)
                     }
-                    updateRobotLocation()
-                },
-                complete: function () {
-                    // pickUp(color)
                 }
-            }))
+                updateRobotLocation()
+            },
+            always: function () {
+                updateRobotEngine(0, 0)
+                if (first.length > 0)
+                    pickUp(color)
+                else
+                    hitTheWall()
+            }
+        }
+    ]
+    for (let i = 0; i < locations.length; i++) {
+        let location = locations[i]
+        let option = options[i]
+        robot
+            .animate(animateKeyframe(true, location.left, location.top), animateOptions(location.left, location.top, option))
+    }
+    robot.dequeue(queue)
 }
 
 function pickUp(color) {
     updateRobotMagnet(true)
-    $('.block.' + color + ':first').className = 'block transparent'
-    $('#robot-block').className = 'block ' + color
+    $('.block.bowel.' + color + ':first').removeClass(color).removeClass('bowel').addClass('transparent')
+    $('#robot-block').removeClass('transparent').addClass(color)
     goToPile(color)
 }
 
-function putDown() {
-    updateRobotMagnet(false)
+function goToBowel(pileBlock, queue) {
+    if (queue == null) queue = 'findColor-' + Math.random()
+    let location = {
+        top: $('#bowel').offset().top - $('#robot').offset().top - 40,
+        left: -($('#robot').offset().left - $('#bowel').offset().left - $('#bowel').width() / 2)
+    }
+    let robot = $('#robot')
+    robot
+        .animate(animateKeyframe(true, null, location.top), animateOptions(null, location.top, {queue: queue}))
+        .animate(animateKeyframe(true, location.left, null), animateOptions(location.left, null, {queue: queue}))
+    robot.dequeue(queue)
 }
 
-function goToPile(color) {
+function putDown(pileBlock, color) {
+    updateRobotMagnet(false)
+    pileBlock.removeClass('transparent').addClass(color)
+    $('#robot-block').removeClass(color).addClass('transparent')
+    let counter = parseInt($('#' + color + '-counter').text())
+    $('#' + color + '-counter').text(counter + 1)
+    goToBowel(pileBlock)
+}
+
+function goToPile(color, queue) {
+    if (queue == null) queue = 'findColor-' + Math.random()
     let pile = $('.pile.' + color + '-b:first')
     let robot = $('#robot')
-    let bowel = $('.bowel')
-    let counter = $('#' + color + '-counter')
+    let bowel = $('#bowel')
+    let counter = parseInt($('#' + color + '-counter').text())
     let lastTransparentBlock = pile.find('.pile-block.transparent:first')
-    console.log('here')
-    robot
-        .animate(animateKeyframe(true, null, -bowel.height() + 7), animateOptions(null, -bowel.height() + 7, {}))
+    let pileLocations = [
+        {top: -bowel.height() + 7},
+        {left: pile.offset().left - robot.offset().left + 5},
+        {top: lastTransparentBlock.offset().top - bowel.height() - robot.height() - 22 - counter}]
+    let options = [
+        {queue: queue}, {queue: queue}, {queue: queue, always: () => putDown(lastTransparentBlock, color)}]
+    for (let i = 0; i < pileLocations.length; i++) {
+        let location = pileLocations[i]
+        robot
+            .animate(animateKeyframe(true, location.left, location.top), animateOptions(location.left, location.top, options[i]))
+    }
+    robot.dequeue(queue)
 }
 
 function move(color) {
