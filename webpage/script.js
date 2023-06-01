@@ -21,6 +21,35 @@ function updateRobotMagnet(v) {
     }
 }
 
+function updateRobotSensors() {
+    let bowel = $('#bowel')
+    let robot = $('#robot')
+    let someBowelBlock = $('.block.bowel:first')
+    let colorSensor1 = $('#robot-color-1')
+    let colorSensor2 = $('#robot-color-2')
+    let bowelHeight = Math.floor(bowel.offset().top + bowel.height())
+    let robotHeight = Math.floor(robot.offset().top + robot.height() + colorSensor1.height() - 3)
+    let robotLeft = Math.floor(robot.offset().left)
+    let robotRight = Math.floor(robot.offset().left + robot.width())
+    let robotCenter = Math.floor(robot.offset().left + robot.width() / 2)
+    let oldColor1 = colorSensor1.attr('class').substring(6);
+    let oldColor2 = colorSensor2.attr('class').substring(6);
+    let newColor1 = 'transparent'
+    let newColor2 = 'transparent'
+    if (Math.abs(robotHeight - bowelHeight) <= 2) {
+        let e = document.elementFromPoint(robotCenter, someBowelBlock.offset().top+9)
+        // console.log(e.className)
+        if(e.className && e.className.includes('bowel')) {
+            console.log(e)
+        }
+
+    }
+    if(oldColor1 !== newColor1)
+        colorSensor1.removeClass(oldColor1).addClass(newColor1)
+    if(oldColor2 !== newColor2)
+        colorSensor2.removeClass(oldColor2).addClass(newColor2)
+}
+
 function animateKeyframe(isRelative, left, top) {
     if (left != null) {
         if (isRelative) {
@@ -37,10 +66,6 @@ function animateKeyframe(isRelative, left, top) {
         }
         return {top: top,}
     }
-}
-
-function updateRobotSensors() {
-
 }
 
 function animateOptions(left, top, options) {
@@ -160,147 +185,18 @@ function goToPile(color, queue) {
     let pileLocations = [
         {top: -bowel.height() + 7},
         {left: pile.offset().left - robot.offset().left + 5},
-        {top: lastTransparentBlock.offset().top - bowel.height() - robot.height() - 22 - counter}]
+        {top: lastTransparentBlock.offset().top - robot.offset().top + robot.height() + 2}]
     let options = [
         {queue: queue}, {queue: queue}, {queue: queue, always: () => putDown(lastTransparentBlock, color)}]
     for (let i = 0; i < pileLocations.length; i++) {
         let location = pileLocations[i]
-        robot
-            .animate(animateKeyframe(true, location.left, location.top), animateOptions(location.left, location.top, options[i]))
+        robot.animate(animateKeyframe(true, location.left, location.top), animateOptions(location.left, location.top, options[i]))
     }
     robot.dequeue(queue)
 }
 
 function move(color) {
     findColor(color)
-}
-
-function move2(color) {
-    var robot = document.getElementById('robot')
-    var robotBlock = document.getElementById('robot-block')
-    var blocks = document.getElementsByClassName('block ' + color)
-    var coloredPile = document.getElementsByClassName('pile ' + color + '-b')[0]
-    var counter = document.getElementById(color + '-counter')
-    var lastTransparentBlock = coloredPile.querySelectorAll('.pile-block.transparent')[0]
-    var count = parseInt(counter.innerHTML)
-
-    if (blocks.length > 0) {
-        var firstBlock = blocks[0]
-        var blockLeft = firstBlock.offsetLeft - robot.offsetLeft
-        var blockTop = firstBlock.offsetTop - robot.offsetTop - 31
-        var pileLeft = coloredPile.offsetLeft - firstBlock.offsetLeft + 7
-        var pileTop = lastTransparentBlock.offsetTop - robot.offsetTop - 32 - count
-
-        $("#robot")
-            .animate({left: "+=" + blockLeft + "px",},
-                {
-                    duration: DURATION,
-                    step: function (now, tween) {
-                        updateRobotLocation()
-                    },
-                    start: function () {
-                        updateRobotEngine(-10, 0)
-                    },
-                    complete: function () {
-                        updateRobotEngine(0, 0)
-                    }
-                })
-            .animate({top: "+=" + blockTop + "px",},
-                {
-                    duration: DURATION,
-                    step: function (now, tween) {
-                        updateRobotLocation()
-                    },
-                    start: function () {
-                        updateRobotEngine(0, -10)
-                    },
-                    complete: function () {
-                        updateRobotEngine(0, 0)
-                        updateRobotMagnet(true)
-                        firstBlock.className = 'block transparent'
-                        robotBlock.className = 'block ' + color
-                    }
-                })
-            .animate({top: "-40px",},
-                {
-                    duration: DURATION,
-                    step: function (now, tween) {
-                        updateRobotLocation()
-                    },
-                    start: function () {
-                        updateRobotEngine(0, 10)
-                    },
-                    complete: function () {
-                        updateRobotEngine(0, 0)
-                    }
-                })
-            .animate({left: "+=" + pileLeft + "px",},
-                {
-                    duration: DURATION,
-                    step: function (now, tween) {
-                        updateRobotLocation()
-                    },
-                    start: function () {
-                        updateRobotEngine(10, 0)
-                    },
-                    complete: function () {
-                        updateRobotEngine(0, 0)
-                    },
-                })
-            .animate({top: "+=" + pileTop + "px",},
-                {
-                    duration: DURATION,
-                    step: function (now, tween) {
-                        updateRobotLocation()
-                    },
-                    start: function () {
-                        updateRobotEngine(0, -10)
-                    },
-                    complete: function () {
-                        updateRobotEngine(0, 0)
-                        updateRobotMagnet(false)
-                        robotBlock.className = 'block transparent'
-                        lastTransparentBlock.className = 'pile-block ' + color
-                        count++
-                        counter.innerHTML = count.toString()
-                    }
-                })
-            .animate({top: "-40px",},
-                {
-                    duration: DURATION,
-                    step: function (now, tween) {
-                        updateRobotLocation()
-                    },
-                    start: function () {
-                        updateRobotEngine(0, 10)
-                    },
-                    complete: function () {
-                        updateRobotEngine(0, 0)
-                    },
-                })
-            .animate({left: "50%",},
-                {
-                    duration: DURATION,
-                    step: function (now, tween) {
-                        updateRobotLocation()
-                    },
-                    start: function () {
-                        updateRobotEngine(-10, 0)
-                    },
-                    complete: function () {
-                        updateRobotEngine(0, 0)
-                    },
-                })
-    } else {
-        $("#robot")
-            .animate({left: "-DURATIONpx",},
-                {
-                    duration: DURATION,
-                    step: function (now, tween) {
-                        updateRobotLocation()
-                    }
-                })
-    }
 }
 
 $(document).ready(function () {
