@@ -152,7 +152,30 @@ function pickUp(color) {
     updateRobotMagnet(true)
     $('.block.bowel.' + color + ':first').removeClass(color).removeClass('bowel').addClass('transparent')
     $('#robot-block').removeClass('transparent').addClass(color)
+
+    let colorSensor1 = $('#robot-color-1')
+    let colorSensor2 = $('#robot-color-2')
+    let oldColor1 = colorSensor1.attr('class').substring(6);
+    let oldColor2 = colorSensor2.attr('class').substring(6);
+    colorSensor1.removeClass(oldColor1).addClass(color)
+    colorSensor2.removeClass(oldColor2).addClass(color)
+
     goToPile(color)
+}
+
+function putDown(pileBlock, color) {
+    updateRobotMagnet(false)
+    pileBlock.removeClass('transparent').addClass(color)
+    $('#robot-block').removeClass(color).addClass('transparent')
+    let counter = parseInt($('#' + color + '-counter').text())
+    $('#' + color + '-counter').text(counter + 1)
+
+    let colorSensor1 = $('#robot-color-1')
+    let colorSensor2 = $('#robot-color-2')
+    colorSensor1.removeClass(color).addClass('transparent')
+    colorSensor2.removeClass(color).addClass('transparent')
+
+    goToBowel(pileBlock)
 }
 
 function goToBowel(pileBlock, queue) {
@@ -166,15 +189,6 @@ function goToBowel(pileBlock, queue) {
         .animate(animateKeyframe(true, null, location.top), animateOptions(null, location.top, {queue: queue}))
         .animate(animateKeyframe(true, location.left, null), animateOptions(location.left, null, {queue: queue}))
     robot.dequeue(queue)
-}
-
-function putDown(pileBlock, color) {
-    updateRobotMagnet(false)
-    pileBlock.removeClass('transparent').addClass(color)
-    $('#robot-block').removeClass(color).addClass('transparent')
-    let counter = parseInt($('#' + color + '-counter').text())
-    $('#' + color + '-counter').text(counter + 1)
-    goToBowel(pileBlock)
 }
 
 function goToPile(color, queue) {
