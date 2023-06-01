@@ -37,10 +37,11 @@ function updateRobotSensors() {
     let newColor1 = 'transparent'
     let newColor2 = 'transparent'
     if (Math.abs(robotHeight - bowelHeight) <= 2) {
-        let e = document.elementFromPoint(robotCenter, someBowelBlock.offset().top+9)
-        // console.log(e.className)
-        if(e.className && e.className.includes('bowel')) {
-            console.log(e)
+        let e = document.elementsFromPoint(robotCenter, someBowelBlock.offset().top + 2)
+            .filter(e => e.className && e.className.includes('block bowel'))
+        if (e.length > 0) {
+            newColor1 = e[0].className.substring(12)
+            newColor2 = e[0].className.substring(12)
         }
 
     }
@@ -127,6 +128,7 @@ function findColor(color, queue) {
                     }
                 }
                 updateRobotLocation()
+                updateRobotSensors()
             },
             always: function () {
                 updateRobotEngine(0, 0)
