@@ -8,7 +8,7 @@ function updateSensorsEquipment() {
 function toggleRadioButtons(checkbox) {
     let radioButtons = document.getElementsByName("color-sensor");
     for (let i = 0; i < radioButtons.length; i++) {
-        radioButtons[i].disabled = checkbox.checked;
+        radioButtons[i].disabled = !checkbox.checked;
     }
     updateSensorsEquipment()
 }
