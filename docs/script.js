@@ -29,26 +29,30 @@ function updateRobotSensors() {
     let colorSensor2 = $('#robot-color-2')
     let bowelHeight = Math.floor(bowel.offset().top + bowel.height())
     let robotHeight = Math.floor(robot.offset().top + robot.height() + colorSensor1.height() - 3)
-    let robotLeft = Math.floor(robot.offset().left)
-    let robotRight = Math.floor(robot.offset().left + robot.width())
     let robotCenter = Math.floor(robot.offset().left + robot.width() / 2)
     let oldColor1 = colorSensor1.attr('class').substring(6);
     let oldColor2 = colorSensor2.attr('class').substring(6);
     let newColor1 = 'transparent'
     let newColor2 = 'transparent'
     if (Math.abs(robotHeight - bowelHeight) <= 2) {
-        let e = document.elementsFromPoint(robotCenter, someBowelBlock.offset().top + 2)
+        let bowelBlocks = document.elementsFromPoint(robotCenter, someBowelBlock.offset().top + 2)
             .filter(e => e.className && e.className.includes('block bowel'))
-        if (e.length > 0) {
-            newColor1 = e[0].className.substring(12)
-            newColor2 = e[0].className.substring(12)
+        if (bowelBlocks.length > 0) {
+            newColor1 = bowelBlocks[0].className.substring(12)
+            newColor2 = bowelBlocks[0].className.substring(12)
         }
-
     }
-    if(oldColor1 !== newColor1)
+    let robotBlock = $('#robot-block')
+    if(robotBlock.css( "background-color" )!=='rgba(0, 0, 0, 0)') {
+        newColor1 = robotBlock.attr('class').substring(6)
+        newColor2 = robotBlock.attr('class').substring(6)
+    }
+    if(oldColor1 != newColor1) {
         colorSensor1.removeClass(oldColor1).addClass(newColor1)
-    if(oldColor2 !== newColor2)
+    }
+    if(oldColor2 != newColor2) {
         colorSensor2.removeClass(oldColor2).addClass(newColor2)
+    }
 }
 
 function animateKeyframe(isRelative, left, top) {
@@ -116,19 +120,21 @@ function findColor(color, queue) {
         {left: bowel.width() - 11}
     ]
     let options = [
-        {queue: queue}, {queue: queue}, {
+        {queue: queue},
+        {queue: queue},
+        {
             queue: queue,
             duration: DURATION * 6,
             step: function (now, tween) {
+                updateRobotLocation()
+                updateRobotSensors()
                 if (first.length > 0) {
-                    let blockLeft = Math.floor(first.offset().left)
-                    let robotLeft = Math.floor(robot.offset().left)
-                    if (blockLeft >= robotLeft - 2 && blockLeft <= robotLeft + 2) {
+                    let robotCenter = Math.floor(robot.offset().left + robot.width() / 2)
+                    let blockCenter = Math.floor(first.offset().left + first.width() / 2)
+                    if (Math.abs(robotCenter - blockCenter) <= 2) {
                         robot.stop(true)
                     }
                 }
-                updateRobotLocation()
-                updateRobotSensors()
             },
             always: function () {
                 updateRobotEngine(0, 0)
@@ -153,13 +159,6 @@ function pickUp(color) {
     $('.block.bowel.' + color + ':first').removeClass(color).removeClass('bowel').addClass('transparent')
     $('#robot-block').removeClass('transparent').addClass(color)
 
-    let colorSensor1 = $('#robot-color-1')
-    let colorSensor2 = $('#robot-color-2')
-    let oldColor1 = colorSensor1.attr('class').substring(6);
-    let oldColor2 = colorSensor2.attr('class').substring(6);
-    colorSensor1.removeClass(oldColor1).addClass(color)
-    colorSensor2.removeClass(oldColor2).addClass(color)
-
     goToPile(color)
 }
 
@@ -169,11 +168,6 @@ function putDown(pileBlock, color) {
     $('#robot-block').removeClass(color).addClass('transparent')
     let counter = parseInt($('#' + color + '-counter').text())
     $('#' + color + '-counter').text(counter + 1)
-
-    let colorSensor1 = $('#robot-color-1')
-    let colorSensor2 = $('#robot-color-2')
-    colorSensor1.removeClass(color).addClass('transparent')
-    colorSensor2.removeClass(color).addClass('transparent')
 
     goToBowel(pileBlock)
 }
