@@ -93,7 +93,7 @@ function findColorMalfunction(baseQueue, robot) {
     let secondBowelBlock = $('.block.bowel:not(.transparent):nth-child(2)')
     findColorMalfunctionCode = 2
     console.log('secondBowelBlock', secondBowelBlock)
-    robot.stop()
+    // robot.stop()
     /*let offset = secondBowelBlock.offset().left - robot.offset().left
     robot.animate(
         animateKeyframe(true, offset, null),
