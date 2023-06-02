@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sorting game</title>
+    <title>Sorter-robot simulation</title>
+    <meta name="description" content="A simulator of a sorter robot (e.g., package sorter) designed for testing.
+        The simulator includes sensors and actuators readings, as well as an option for pushing errors.">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="Achiya Elyasaf https://achiya.elyasaf.net">
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
@@ -101,10 +105,10 @@
             <label for="disableSensorsRadios">Sensors failures</label><br/>
             <div style="margin-left: 10px;">
                 <input type="radio" name="color-sensor" value="always-green" id="always-green"
-                       onchange="updateSensorsEquipment(this)" checked disabled>
+                       onchange="updateSensorsEquipment(this.value)" checked disabled>
                 <label for="always-green">Sensor 1 is 'green' or 'none'</label><br/>
                 <input type="radio" name="color-sensor" value="noise" id="noise"
-                       onchange="updateSensorsEquipment(this)" disabled>
+                       onchange="updateSensorsEquipment(this.value)" disabled>
                 <label for="noise">Both sensors are noisy</label><br/>
             </div>
         </fieldset>
