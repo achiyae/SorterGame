@@ -3,7 +3,8 @@
 <head>
     <title>Sorting game</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </head>
 <body>
@@ -17,11 +18,11 @@
             <div id="robot-block" class="block transparent"></div>
         </div>
         <div class="block bowel green"></div>
-<!--        <div class="block bowel red"></div>-->
+        <!--        <div class="block bowel red"></div>-->
         <div class="block bowel green"></div>
-<!--        <div class="block bowel red"></div>-->
+        <!--        <div class="block bowel red"></div>-->
         <div class="block bowel blue"></div>
-<!--        <div class="block bowel red"></div>-->
+        <!--        <div class="block bowel red"></div>-->
         <div class="block bowel blue"></div>
         <div class="block bowel blue"></div>
         <div class="block bowel green"></div>
@@ -58,13 +59,14 @@
         <div id="green-counter" class="counter">0</div>
     </div>
 </div>
-<div class="container" style="height: 150px; border: transparent; background: transparent">
+<div class="container equipment">
     <div class="side-panel">
         <h2>Actuators</h2>
         <table>
             <tr>
                 <td>Magnet:</td>
-                <td><p id="robot-value-magnet" style="background: transparent; border: black solid 1px; text-align: center">Off</p></td>
+                <td><p id="robot-value-magnet"
+                       style="background: transparent; border: black solid 1px; text-align: center">Off</p></td>
             </tr>
             <tr>
                 <td style="min-width: 62px">H-Motor:</td>
@@ -92,6 +94,23 @@
     </div>
     <div style="width: 20px;"></div>
     <div class="side-panel">
+        <h2>Malfunctions</h2>
+        <fieldset>
+            <input type="checkbox" id="disableSensorsRadios" onchange="toggleRadioButtons(this)">
+            <label for="disableSensorsRadios">Disable Radio Buttons</label><br/>
+            <input type="radio" name="color-sensor" value="always-green" id="always-green"
+                   onchange="updateSensorsEquipment()">
+            <label for="always-green">Sensor 1 is always green</label><br/>
+            <input type="radio" name="color-sensor" value="noise" id="noise"
+                   onchange="updateSensorsEquipment()">
+            <label for="noise">Both sensors are noisy</label><br/>
+        </fieldset><br/>
+        <fieldset>
+            <input type="checkbox" id="magnetErrors" onchange="magnetFailures(this)">
+            <label for="magnetErrors">Random magnet failures</label><br/>
+        </fieldset>
+    </div>
+    <div class="side-panel hide">
         <h2>Debug</h2>
         <table>
             <tr>

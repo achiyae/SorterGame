@@ -9,6 +9,14 @@
     padding: 20px;
 }
 
+.equipment {
+    height: 150px;
+    border: transparent;
+    background: transparent;
+    justify-content: center;
+    align-items: flex-start;
+}
+
 #bowel {
     bottom: 10px;
     border-left: black solid 2px;
@@ -19,6 +27,10 @@
     display: flex;
     flex-shrink: 0;
     justify-content: space-between;
+}
+
+.hide {
+    display: none !important;
 }
 
 .pile {
@@ -132,7 +144,7 @@ button:not(:first-child) {
 
 .side-panel {
     /*min-width: 140px;*/
-    height: 110px;
+    min-height: 110px;
     align-items: center;
     padding: 20px;
     background-color: #f2f2f2;
