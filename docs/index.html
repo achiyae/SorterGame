@@ -96,20 +96,20 @@
     <div class="side-panel">
         <h2>Malfunctions</h2>
         <fieldset>
-            <input type="checkbox" id="disableSensorsRadios" onchange="toggleRadioButtons(this)">
+            <input type="checkbox" id="disableSensorsRadios" onchange="toggleSensorErrors(this)">
             <label for="disableSensorsRadios">Sensors failures</label><br/>
             <div style="margin-left: 10px;">
                 <input type="radio" name="color-sensor" value="always-green" id="always-green"
-                       onchange="updateSensorsEquipment()" checked disabled>
-                <label for="always-green">Sensor 1 is always green</label><br/>
+                       onchange="updateSensorsEquipment(this)" checked disabled>
+                <label for="always-green">Sensor 1 is 'green' or 'none'</label><br/>
                 <input type="radio" name="color-sensor" value="noise" id="noise"
-                       onchange="updateSensorsEquipment()" disabled>
+                       onchange="updateSensorsEquipment(this)" disabled>
                 <label for="noise">Both sensors are noisy</label><br/>
             </div>
         </fieldset>
         <br/>
         <fieldset>
-            <input type="checkbox" id="magnetErrors">
+            <input type="checkbox" id="magnetErrors" onchange="magnetErrors = this.checked">
             <label for="magnetErrors">Random magnet failures</label><br/>
         </fieldset>
     </div>

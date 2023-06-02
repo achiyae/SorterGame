@@ -1,16 +1,19 @@
 const DURATION = 500
-let sensorsError = false
+let sensorsError = 'always-green'
+let enableSensorErrors = false
+let magnetErrors = false
+let findColorMalfunctionCode = 0
 
-function updateSensorsEquipment() {
-
+function updateSensorsEquipment(val) {
+    sensorsError = val
 }
 
-function toggleRadioButtons(checkbox) {
+function toggleSensorErrors(checkbox) {
     let radioButtons = document.getElementsByName("color-sensor");
     for (let i = 0; i < radioButtons.length; i++) {
         radioButtons[i].disabled = !checkbox.checked;
     }
-    updateSensorsEquipment()
+    enableSensorErrors = checkbox.checked
 }
 
 function updateRobotLocation() {
@@ -26,12 +29,29 @@ function updateRobotEngine(h, v) {
 }
 
 function updateRobotMagnet(v) {
-    if (!v) v = false
+    if (v == null) {
+        if (magnetErrors && $('#robot-value-magnet').text() === 'On') {
+            if (Math.random() < 0.01) {
+                // console.log('Magnet error')
+                $('#robot-value-magnet').text('Off').css("background-color", 'transparent')
+                setTimeout(() => {
+                    if($('#robot-block').css("background-color")!=='rgba(0, 0, 0, 0)') {
+                        $('#robot-value-magnet').text('On').css("background-color", '#51EF51FF')
+                    }
+                }, 100)
+            }
+        }
+        return
+    }
     if (!v) {
         $('#robot-value-magnet').text('Off').css("background-color", 'transparent')
     } else {
         $('#robot-value-magnet').text('On').css("background-color", '#51EF51FF')
     }
+}
+
+function findColorMalfunction(queue, robot) {
+    findColorMalfunctionCode = 2
 }
 
 function updateRobotSensors() {
@@ -56,14 +76,20 @@ function updateRobotSensors() {
         }
     }
     let robotBlock = $('#robot-block')
-    if(robotBlock.css( "background-color" )!=='rgba(0, 0, 0, 0)') {
+    if (robotBlock.css("background-color") !== 'rgba(0, 0, 0, 0)') {
         newColor1 = robotBlock.attr('class').substring(6)
         newColor2 = robotBlock.attr('class').substring(6)
     }
-    if(oldColor1 != newColor1) {
+    if (enableSensorErrors && sensorsError === 'always-green' && newColor1 !== 'transparent') {
+        newColor1 = 'green'
+        if (findColorMalfunctionCode === 0) {
+            findColorMalfunctionCode = 1
+        }
+    }
+    if (oldColor1 != newColor1) {
         colorSensor1.removeClass(oldColor1).addClass(newColor1)
     }
-    if(oldColor2 != newColor2) {
+    if (oldColor2 != newColor2) {
         colorSensor2.removeClass(oldColor2).addClass(newColor2)
     }
 }
@@ -92,6 +118,7 @@ function animateOptions(left, top, options) {
     options.step = options.step || function (now, tween) {
         updateRobotLocation()
         updateRobotSensors()
+        updateRobotMagnet()
     }
     options.start = options.start || function () {
         if (left != null)
@@ -141,6 +168,9 @@ function findColor(color, queue) {
             step: function (now, tween) {
                 updateRobotLocation()
                 updateRobotSensors()
+                if (findColorMalfunctionCode === 1) {
+                    findColorMalfunction(queue, robot)
+                }
                 if (first.length > 0) {
                     let robotCenter = Math.floor(robot.offset().left + robot.width() / 2)
                     let blockCenter = Math.floor(first.offset().left + first.width() / 2)
@@ -224,6 +254,6 @@ function move(color) {
 
 $(document).ready(function () {
     updateRobotLocation()
-    updateRobotEngine()
-    updateRobotMagnet()
+    updateRobotEngine(0, 0)
+    updateRobotMagnet(false)
 })
