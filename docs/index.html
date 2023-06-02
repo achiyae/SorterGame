@@ -97,16 +97,19 @@
         <h2>Malfunctions</h2>
         <fieldset>
             <input type="checkbox" id="disableSensorsRadios" onchange="toggleRadioButtons(this)">
-            <label for="disableSensorsRadios">Disable Radio Buttons</label><br/>
-            <input type="radio" name="color-sensor" value="always-green" id="always-green"
-                   onchange="updateSensorsEquipment()">
-            <label for="always-green">Sensor 1 is always green</label><br/>
-            <input type="radio" name="color-sensor" value="noise" id="noise"
-                   onchange="updateSensorsEquipment()">
-            <label for="noise">Both sensors are noisy</label><br/>
-        </fieldset><br/>
+            <label for="disableSensorsRadios">Sensors failures</label><br/>
+            <div style="margin-left: 10px;">
+                <input type="radio" name="color-sensor" value="always-green" id="always-green"
+                       onchange="updateSensorsEquipment()">
+                <label for="always-green">Sensor 1 is always green</label><br/>
+                <input type="radio" name="color-sensor" value="noise" id="noise"
+                       onchange="updateSensorsEquipment()">
+                <label for="noise">Both sensors are noisy</label><br/>
+            </div>
+        </fieldset>
+        <br/>
         <fieldset>
-            <input type="checkbox" id="magnetErrors" onchange="magnetFailures(this)">
+            <input type="checkbox" id="magnetErrors">
             <label for="magnetErrors">Random magnet failures</label><br/>
         </fieldset>
     </div>

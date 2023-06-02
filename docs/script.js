@@ -5,17 +5,6 @@ function updateSensorsEquipment() {
 
 }
 
-function magnetFailures(checkbox) {
-    let magnet = $('#robot-magnet')
-    if (checkbox.checked) {
-        magnet.css("background-color", '#EF5151FF')
-        updateRobotMagnet(true)
-    } else {
-        magnet.css("background-color", 'transparent')
-        updateRobotMagnet(false)
-    }
-}
-
 function toggleRadioButtons(checkbox) {
     let radioButtons = document.getElementsByName("color-sensor");
     for (let i = 0; i < radioButtons.length; i++) {
