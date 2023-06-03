@@ -42,7 +42,7 @@ function addNoiseToRGB(rgb, noiseRange = 100) {
 
 function updateSensorsEquipment(val) {
     sensorsError = val
-    findColorMalfunctionCode = 0
+    findColorMalfunctionCode = 1
 }
 
 function toggleSensorErrors(checkbox) {
@@ -51,6 +51,7 @@ function toggleSensorErrors(checkbox) {
         radioButtons[i].disabled = !checkbox.checked;
     }
     enableSensorErrors = checkbox.checked
+    findColorMalfunctionCode = checkbox.checked ? 1 : 0
 }
 
 function updateRobotLocation() {
@@ -87,12 +88,11 @@ function updateRobotMagnet(v) {
     }
 }
 
-function findColorMalfunction(baseQueue, robot, color) {
+function findColorMalfunctionNoise(baseQueue, robot, color) {
     let queue = baseQueue + 'findColorMalfunction'
     let oldQueue = baseQueue + 'findColor'
     let secondBowelBlock = $('.block.bowel:not(.transparent)').eq(1)
     robot.stop(true)
-    // console.log('secondBowelBlock', secondBowelBlock)
     let offset = secondBowelBlock.offset().left - robot.offset().left
     robot.animate(
         animateKeyframe(true, offset, null),
@@ -105,16 +105,56 @@ function findColorMalfunction(baseQueue, robot, color) {
                 robot.dequeue(oldQueue)
             },
             complete: () => {
-                findColorMalfunctionCode = 2 // 2 - success
+                findColorMalfunctionCode = 0
                 findColor(baseQueue, color, true)
             }
         }))
     robot.dequeue(queue)
 }
 
-function updateRobotSensors() {
-    let bowel = $('#bowel')
+function findColorMalfunctionGreen(baseQueue, robot, color) {
+
+}
+
+function findColorMalfunction(baseQueue, robot, color) {
+    if (sensorsError === 'always-green') {
+        findColorMalfunctionGreen(baseQueue, robot, color)
+    } else if (sensorsError === 'noise') {
+        findColorMalfunctionNoise(baseQueue, robot, color)
+    }
+}
+
+function updateRobotSensorsPile(robot) {
+
+    let redPile = $('.pile.red-b:first')
+    let greenPile = $('.pile.green-b:first')
+    let bluePile = $('.pile.blue-b:first')
+
+    if(robot.offset().left >= redPile.offset().left && robot.offset().left <= redPile.offset().left + redPile.width()) {
+
+    }
+}
+
+function verboseSensor(){
     let robot = $('#robot')
+    let belowRobotLocation = {
+        top: Math.floor(robot.offset().top + robot.height() + 4),
+        left: Math.floor(robot.offset().left + robot.width() / 2) //robot center
+    }
+    let belowRobotElements = document.elementsFromPoint(belowRobotLocation.left, belowRobotLocation.top)
+        .filter(e => (e.className && (e.className.includes('block') || e.className.includes('pile'))))
+    if(belowRobotElements.length >0 ) {
+        robot.stop(true)
+        console.log(belowRobotElements)
+        console.log(belowRobotElements.map(e => e.backgroundColor))
+        throw new Error('Robot is on top of a block')
+    }
+}
+
+function updateRobotSensors(verbose = false) {
+    if(verbose) verboseSensor()
+    let robot = $('#robot')
+    let bowel = $('#bowel')
     let someBowelBlock = $('.block.bowel:first')
     let colorSensor1 = $('#robot-color-1')
     let colorSensor2 = $('#robot-color-2')
@@ -140,9 +180,6 @@ function updateRobotSensors() {
     }
     if (enableSensorErrors && sensorsError === 'always-green' && newColor1 !== 'transparent') {
         newColor1 = 'green'
-        if (findColorMalfunctionCode === 0) {
-            findColorMalfunctionCode = 1
-        }
     }
     if (enableSensorErrors && sensorsError === 'noise') {
         if (newColor1 !== 'transparent') {
@@ -151,9 +188,6 @@ function updateRobotSensors() {
         } else {
             colorSensor1.css("background-color", '')
             colorSensor2.css("background-color", '')
-        }
-        if (findColorMalfunctionCode === 0) {
-            findColorMalfunctionCode = 1
         }
     }
     if (oldColor1 != newColor1) {
@@ -237,7 +271,7 @@ function findColor(baseQueue, color, startFromBowel) {
             duration: DURATION * 6,
             step: function (now, tween) {
                 updateRobotLocation()
-                updateRobotSensors()
+                updateRobotSensors(true)
                 if (findColorMalfunctionCode === 1) {
                     findColorMalfunction(baseQueue, robot, color)
                 }
@@ -250,19 +284,19 @@ function findColor(baseQueue, color, startFromBowel) {
                 }
             },
             always: function () {
-                updateRobotEngine(0, 0)
-                if (findColorMalfunctionCode !== 1) {
+                /*updateRobotEngine(0, 0)
+                if (findColorMalfunctionCode === 0) {
                     if (first.length > 0)
                         pickUp(baseQueue, color)
                     else
                         hitTheWall(baseQueue)
-                }
+                }*/
             }
         }
     ]
     if (startFromBowel) {
-        locations.splice(0,2)
-        options.splice(0,2)
+        locations.splice(0, 2)
+        options.splice(0, 2)
     }
     for (let i = 0; i < locations.length; i++) {
         let location = locations[i]
