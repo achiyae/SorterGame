@@ -113,7 +113,7 @@ function findColorMalfunctionNoise(baseQueue, robot, color) {
 }
 
 function findColorMalfunctionGreen(baseQueue, robot, color) {
-
+    goToPile(baseQueue, robot, 'red', true)
 }
 
 function findColorMalfunction(baseQueue, robot, color) {
@@ -144,9 +144,9 @@ function verboseSensor() {
     let belowRobotElements = document.elementsFromPoint(belowRobotLocation.left, belowRobotLocation.top)
         .filter(e => (e.className && (e.className.includes('block') || e.className.includes('pile'))))
     if (belowRobotElements.length > 0) {
-        if(belowRobotElements[0].className.includes('pile')) {
-            console.log(belowRobotElements[belowRobotElements.length-1])
-            let color = belowRobotElements[belowRobotElements.length-1].className.split(' ')[1].split('-')[0]
+        if (belowRobotElements[0].className.includes('pile')) {
+            console.log(belowRobotElements[belowRobotElements.length - 1])
+            let color = belowRobotElements[belowRobotElements.length - 1].className.split(' ')[1].split('-')[0]
             console.log(color)
         }
         robot.stop(true)
@@ -170,22 +170,14 @@ function updateRobotSensors() {
     let newColor1 = 'transparent'
     let newColor2 = 'transparent'
     if (belowRobotElements.length > 0) {
-        if(belowRobotElements[0].className.includes('pile')) {
-            newColor1 = belowRobotElements[belowRobotElements.length-1].className.split(' ')[1].split('-')[0]
+        if (belowRobotElements[0].className.includes('pile')) {
+            newColor1 = belowRobotElements[belowRobotElements.length - 1].className.split(' ')[1].split('-')[0]
             newColor2 = newColor1
-        }else {
+        } else {
             newColor1 = belowRobotElements[0].className.substring(12)
             newColor2 = belowRobotElements[0].className.substring(12)
         }
     }
-    /*if (Math.abs(robotHeight - bowelHeight) <= 2) {
-        let bowelBlocks = document.elementsFromPoint(robotCenter, someBowelBlock.offset().top + 2)
-            .filter(e => e.className && e.className.includes('block bowel'))
-        if (bowelBlocks.length > 0) {
-            newColor1 = bowelBlocks[0].className.substring(12)
-            newColor2 = bowelBlocks[0].className.substring(12)
-        }
-    }*/
     let robotBlock = $('#robot-block')
     if (robotBlock.css("background-color") !== 'rgba(0, 0, 0, 0)') {
         newColor1 = robotBlock.attr('class').substring(6)
@@ -351,10 +343,11 @@ function goToBowel(baseQueue) {
     robot.dequeue(queue)
 }
 
-function goToPile(baseQueue, color, verbose) {
+function goToPile(baseQueue, color, alwaysGreenCheck) {
     let queue = baseQueue + 'findColor'
     let pile = $('.pile.' + color + '-b:first')
     let robot = $('#robot')
+    let currentLocation = $('#robot').offset()
     let bowel = $('#bowel')
     let lastTransparentBlock = pile.find('.pile-block.transparent:first')
     let pileLocations = [
@@ -365,7 +358,11 @@ function goToPile(baseQueue, color, verbose) {
         {queue: queue}, {queue: queue}, {
             queue: queue,
             always: () => {
-                if (!verbose) putDown(baseQueue, lastTransparentBlock, color)
+                if (alwaysGreenCheck) {
+                    //todo go back to currnet location
+                } else {
+                    putDown(baseQueue, lastTransparentBlock, color)
+                }
             }
         }]
     for (let i = 0; i < pileLocations.length; i++) {
