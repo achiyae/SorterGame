@@ -130,12 +130,12 @@ function updateRobotSensorsPile(robot) {
     let greenPile = $('.pile.green-b:first')
     let bluePile = $('.pile.blue-b:first')
 
-    if(robot.offset().left >= redPile.offset().left && robot.offset().left <= redPile.offset().left + redPile.width()) {
+    if (robot.offset().left >= redPile.offset().left && robot.offset().left <= redPile.offset().left + redPile.width()) {
 
     }
 }
 
-function verboseSensor(){
+function verboseSensor() {
     let robot = $('#robot')
     let belowRobotLocation = {
         top: Math.floor(robot.offset().top + robot.height() + 4),
@@ -143,36 +143,49 @@ function verboseSensor(){
     }
     let belowRobotElements = document.elementsFromPoint(belowRobotLocation.left, belowRobotLocation.top)
         .filter(e => (e.className && (e.className.includes('block') || e.className.includes('pile'))))
-    if(belowRobotElements.length >0 ) {
+    if (belowRobotElements.length > 0) {
+        if(belowRobotElements[0].className.includes('pile')) {
+            console.log(belowRobotElements[belowRobotElements.length-1])
+            let color = belowRobotElements[belowRobotElements.length-1].className.split(' ')[1].split('-')[0]
+            console.log(color)
+        }
         robot.stop(true)
-        console.log(belowRobotElements)
         console.log(belowRobotElements.map(e => e.backgroundColor))
         throw new Error('Robot is on top of a block')
     }
 }
 
-function updateRobotSensors(verbose = false) {
-    if(verbose) verboseSensor()
+function updateRobotSensors() {
     let robot = $('#robot')
-    let bowel = $('#bowel')
-    let someBowelBlock = $('.block.bowel:first')
     let colorSensor1 = $('#robot-color-1')
     let colorSensor2 = $('#robot-color-2')
-    let bowelHeight = Math.floor(bowel.offset().top + bowel.height())
-    let robotHeight = Math.floor(robot.offset().top + robot.height() + colorSensor1.height() - 3)
-    let robotCenter = Math.floor(robot.offset().left + robot.width() / 2)
+    let belowRobotLocation = {
+        top: Math.floor(robot.offset().top + robot.height() + 4),
+        left: Math.floor(robot.offset().left + robot.width() / 2) //robot center
+    }
+    let belowRobotElements = document.elementsFromPoint(belowRobotLocation.left, belowRobotLocation.top)
+        .filter(e => (e.className && (e.className.includes('block') || e.className.includes('pile'))))
     let oldColor1 = colorSensor1.attr('class').substring(6);
     let oldColor2 = colorSensor2.attr('class').substring(6);
     let newColor1 = 'transparent'
     let newColor2 = 'transparent'
-    if (Math.abs(robotHeight - bowelHeight) <= 2) {
+    if (belowRobotElements.length > 0) {
+        if(belowRobotElements[0].className.includes('pile')) {
+            newColor1 = belowRobotElements[belowRobotElements.length-1].className.split(' ')[1].split('-')[0]
+            newColor2 = newColor1
+        }else {
+            newColor1 = belowRobotElements[0].className.substring(12)
+            newColor2 = belowRobotElements[0].className.substring(12)
+        }
+    }
+    /*if (Math.abs(robotHeight - bowelHeight) <= 2) {
         let bowelBlocks = document.elementsFromPoint(robotCenter, someBowelBlock.offset().top + 2)
             .filter(e => e.className && e.className.includes('block bowel'))
         if (bowelBlocks.length > 0) {
             newColor1 = bowelBlocks[0].className.substring(12)
             newColor2 = bowelBlocks[0].className.substring(12)
         }
-    }
+    }*/
     let robotBlock = $('#robot-block')
     if (robotBlock.css("background-color") !== 'rgba(0, 0, 0, 0)') {
         newColor1 = robotBlock.attr('class').substring(6)
@@ -284,13 +297,13 @@ function findColor(baseQueue, color, startFromBowel) {
                 }
             },
             always: function () {
-                /*updateRobotEngine(0, 0)
+                updateRobotEngine(0, 0)
                 if (findColorMalfunctionCode === 0) {
                     if (first.length > 0)
                         pickUp(baseQueue, color)
                     else
                         hitTheWall(baseQueue)
-                }*/
+                }
             }
         }
     ]
@@ -338,21 +351,22 @@ function goToBowel(baseQueue) {
     robot.dequeue(queue)
 }
 
-function goToPile(baseQueue, color) {
+function goToPile(baseQueue, color, verbose) {
     let queue = baseQueue + 'findColor'
     let pile = $('.pile.' + color + '-b:first')
     let robot = $('#robot')
     let bowel = $('#bowel')
-    let counter = parseInt($('#' + color + '-counter').text())
     let lastTransparentBlock = pile.find('.pile-block.transparent:first')
     let pileLocations = [
         {top: -bowel.height() + 7},
         {left: pile.offset().left - robot.offset().left + 5},
-        {top: lastTransparentBlock.offset().top - robot.offset().top + robot.height() + 2}]
+        {top: lastTransparentBlock.offset().top - robot.offset().top + robot.height() + 20}]
     let options = [
         {queue: queue}, {queue: queue}, {
             queue: queue,
-            always: () => putDown(baseQueue, lastTransparentBlock, color)
+            always: () => {
+                if (!verbose) putDown(baseQueue, lastTransparentBlock, color)
+            }
         }]
     for (let i = 0; i < pileLocations.length; i++) {
         let location = pileLocations[i]
