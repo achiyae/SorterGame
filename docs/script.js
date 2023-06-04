@@ -113,7 +113,7 @@ function findColorMalfunctionNoise(baseQueue, robot, color) {
 }
 
 function findColorMalfunctionGreen(baseQueue, robot, color) {
-    goToPile(baseQueue, robot, 'red', true)
+    goToPile(baseQueue, 'red', true)
 }
 
 function findColorMalfunction(baseQueue, robot, color) {
