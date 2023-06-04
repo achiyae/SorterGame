@@ -113,7 +113,7 @@ function findColorMalfunctionNoise(baseQueue, robot, color) {
 }
 
 function findColorMalfunctionGreen(baseQueue, robot, color) {
-    goToPile(baseQueue, 'red', true)
+    goToPile(baseQueue, 'red', color)
 }
 
 function findColorMalfunction(baseQueue, robot, color) {
@@ -348,10 +348,9 @@ function goToBowel(baseQueue, color, alwaysGreenCheck) {
         {queue: queue},
     ]
     if (alwaysGreenCheck) {
-        console.log('alwaysGreenCheck')
         options[1].complete = function () {
             updateRobotEngine(0, 0)
-            findColor(baseQueue, color)
+            findColor(baseQueue, alwaysGreenCheck)
         }
     }
     robot
