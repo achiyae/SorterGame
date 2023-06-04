@@ -331,6 +331,8 @@ function putDown(baseQueue, pileBlock, color, alwaysGreenCheck) {
         $('#robot-block').removeClass(color).addClass('transparent')
         let counter = parseInt($('#' + color + '-counter').text())
         $('#' + color + '-counter').text(counter + 1)
+    } else {
+        // findColorMalfunctionCode = 0
     }
 
     goToBowel(baseQueue, color, alwaysGreenCheck)
