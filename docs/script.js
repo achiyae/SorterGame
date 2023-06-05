@@ -294,7 +294,7 @@ function findColor(baseQueue, color, startFromBowel) {
             },
             always: function () {
                 updateRobotEngine(0, 0)
-                if (findColorMalfunctionCode < 2) {
+                if (findColorMalfunctionCode !==1) {
                     if (first.length > 0)
                         pickUp(baseQueue, color)
                     else
@@ -332,7 +332,7 @@ function putDown(baseQueue, pileBlock, color, alwaysGreenCheck) {
         let counter = parseInt($('#' + color + '-counter').text())
         $('#' + color + '-counter').text(counter + 1)
     } else {
-        // findColorMalfunctionCode = 0
+        findColorMalfunctionCode = 0
     }
 
     goToBowel(baseQueue, color, alwaysGreenCheck)
