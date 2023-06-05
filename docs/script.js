@@ -59,9 +59,18 @@ function updateRobotLocation() {
     $('#robot-value-y').text(Math.round($('#robot').offset().top))
 }
 
-function updateRobotEngine(h, v) {
-    if (!h) h = 0
-    if (!v) v = 0
+function updateRobotEngine(tween) {
+    let h = 0
+    let v = 0
+    if (tween) {
+        let power = tween.end - tween.start
+        power = power === 0 ? 0 : power < 0 ? -10 : 10
+        if (tween.prop === 'left') {
+            h = power
+        } else if (tween.prop === 'top') {
+            v = power
+        }
+    }
     $('#robot-value-motor-h').text(h)
     $('#robot-value-motor-v').text(v)
 }
@@ -100,13 +109,11 @@ function findColorMalfunctionNoise(baseQueue, robot, color) {
     robot.animate(
         animateKeyframe(true, -offset, null),
         animateOptions(-offset, null, {
-            queue: queue, complete: () => {
-                updateRobotEngine(0, 0)
-                robot.dequeue(oldQueue)
-            },
+            queue: queue,
             complete: () => {
                 findColorMalfunctionCode = 0
                 findColor(baseQueue, color, true)
+                robot.dequeue(oldQueue)
             }
         }))
     robot.dequeue(queue)
@@ -127,7 +134,6 @@ function findColorMalfunction(baseQueue, robot, color) {
 }
 
 function updateRobotSensorsPile(robot) {
-
     let redPile = $('.pile.red-b:first')
     let greenPile = $('.pile.green-b:first')
     let bluePile = $('.pile.blue-b:first')
@@ -230,14 +236,9 @@ function animateOptions(left, top, options) {
         updateRobotLocation()
         updateRobotSensors()
         updateRobotMagnet()
+        updateRobotEngine(tween)
     }
-    options.start = options.start || function () {
-        if (left != null)
-            updateRobotEngine(left < 0 ? -10 : 10, 0)
-        else if (top != null)
-            updateRobotEngine(0, top < 0 ? -10 : 10)
-    }
-    options.complete = options.complete || function () {
+    options.always = options.always || function () {
         updateRobotEngine(0, 0)
     }
     return options
@@ -279,6 +280,7 @@ function findColor(baseQueue, color, startFromBowel) {
             queue: queue,
             duration: DURATION * 6,
             step: function (now, tween) {
+                updateRobotEngine(tween)
                 updateRobotLocation()
                 updateRobotSensors()
                 if (findColorMalfunctionCode === 1 && colorSensor1.css("background-color") !== colorSensor2.css("background-color")) {
@@ -289,16 +291,11 @@ function findColor(baseQueue, color, startFromBowel) {
                     let blockCenter = Math.floor(first.offset().left + first.width() / 2)
                     if (Math.abs(robotCenter - blockCenter) <= 2) {
                         robot.stop(true)
+                        if (first.length > 0)
+                            pickUp(baseQueue, color)
+                        else
+                            hitTheWall(baseQueue)
                     }
-                }
-            },
-            always: function () {
-                updateRobotEngine(0, 0)
-                if (findColorMalfunctionCode !==1) {
-                    if (first.length > 0)
-                        pickUp(baseQueue, color)
-                    else
-                        hitTheWall(baseQueue)
                 }
             }
         }
@@ -325,7 +322,7 @@ function pickUp(baseQueue, color) {
 }
 
 function putDown(baseQueue, pileBlock, color, alwaysGreenCheck) {
-    if(!alwaysGreenCheck) {
+    if (!alwaysGreenCheck) {
         updateRobotMagnet(false)
         pileBlock.removeClass('transparent').addClass(color)
         $('#robot-block').removeClass(color).addClass('transparent')
@@ -351,7 +348,6 @@ function goToBowel(baseQueue, color, alwaysGreenCheck) {
     ]
     if (alwaysGreenCheck) {
         options[1].complete = function () {
-            updateRobotEngine(0, 0)
             findColor(baseQueue, alwaysGreenCheck)
         }
     }
