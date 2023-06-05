@@ -182,8 +182,8 @@ function updateRobotSensors() {
             newColor1 = belowRobotElements[belowRobotElements.length - 1].className.split(' ')[1].split('-')[0]
             newColor2 = newColor1
         } else {
-            newColor1 = belowRobotElements[0].className.substring(6)
-            newColor2 = belowRobotElements[0].className.substring(6)
+            newColor1 = belowRobotElements[0].className.split(' ').slice(-1)[0]
+            newColor2 = newColor1
         }
     }
     let robotBlock = $('#robot-block')
