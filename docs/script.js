@@ -98,7 +98,7 @@ function updateRobotMagnet(v) {
 }
 
 function findColorMalfunctionNoise(baseQueue, robot, color) {
-    let queue = baseQueue + 'findColorMalfunction'
+    let queue = baseQueue + 'findColorMalfunctionNoise'
     let oldQueue = baseQueue + 'findColor'
     let secondBowelBlock = $('.block.bowel:not(.transparent)').eq(1)
     robot.stop(true)
@@ -246,7 +246,7 @@ function animateOptions(left, top, options) {
 
 
 function hitTheWall(baseQueue) {
-    let queue = baseQueue + 'findColor'
+    let queue = baseQueue + 'hitTheWall'
     let robot = $('#robot')
     let locations = []
     for (let i = 0; i < 500; i++) {
@@ -291,11 +291,13 @@ function findColor(baseQueue, color, startFromBowel) {
                     let blockCenter = Math.floor(first.offset().left + first.width() / 2)
                     if (Math.abs(robotCenter - blockCenter) <= 2) {
                         robot.stop(true)
-                        if (first.length > 0)
-                            pickUp(baseQueue, color)
-                        else
-                            hitTheWall(baseQueue)
+                        pickUp(baseQueue, color)
                     }
+                }
+            },
+            complete: function () {
+                if(first.length === 0) {
+                    hitTheWall(baseQueue)
                 }
             }
         }
@@ -358,7 +360,7 @@ function goToBowel(baseQueue, color, alwaysGreenCheck) {
 }
 
 function goToPile(baseQueue, color, alwaysGreenCheck) {
-    let queue = baseQueue + 'findColor'
+    let queue = baseQueue + 'goToPile'
     let pile = $('.pile.' + color + '-b:first')
     let robot = $('#robot')
     let currentLocation = $('#robot').offset()
