@@ -99,7 +99,6 @@ function dropBlock(currentQueue) {
 function updateRobotMagnet(v, currentQueue) {
     if (v == null) {
         if (magnetErrors) {
-            magnetErrors = false
             if ($('#robot-value-magnet').text() === 'On') {
                 $('#robot-value-magnet').text('Off').css('background-color', 'transparent')
                 dropBlock(currentQueue)
@@ -109,6 +108,7 @@ function updateRobotMagnet(v, currentQueue) {
                     }
                 }, 200)
             }
+            magnetErrors = false
         }
         return
     }
