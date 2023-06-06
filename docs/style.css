@@ -112,6 +112,11 @@ button:not(:first-child) {
     margin-right: 1px;
 }
 
+dropping-block {
+    position: relative;
+    top: 0px;
+}
+
 #robot .block {
     margin-top: 1px;
     margin-left: -1px;
