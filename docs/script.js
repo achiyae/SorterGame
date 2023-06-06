@@ -80,29 +80,19 @@ function dropBlock(currentQueue) {
   let color = $('#robot-block').attr('class').substring(6)
   if (color !== 'transparent') {
     let queue = Math.random() + '-dropBlock'
-    let block = $('<div id="dropping-block"></div>')
-    block.addClass('block ' + color).removeClass('transparent')
+    let block = $('<div class="block dropping"></div>')
+    block.addClass(color).removeClass('transparent')
     $('#robot').append(block)
-    let distance = 400//$('.container').height() - block.top - block.height()
+    let distance = $('.container').offset().top + $('.container').height() - $('.block.dropping').offset().top + 30
     $('#robot-block').removeClass(color).addClass('transparent')
-    setTimeout(() => {
-        $('#dropping-block').animate(
-          {
-            top: '400px'
-          },
-          {
-            queue: queue,
-            step: (now, tween) => {
-              console.log(now)
-            },
-            duration: DURATION
-          }
-        )
-        block.dequeue(queue)
+    $('.block.dropping').animate(
+      animateKeyframe(true, null, distance),
+      {
+        queue: queue,
+        duration: DURATION
       }
-      ,
-      1000
     )
+    $('.block.dropping').dequeue(queue)
   }
 }
 

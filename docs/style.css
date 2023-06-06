@@ -76,12 +76,6 @@
     background-color: gray;
 }
 
-#robot-falling {
-    position: relative;
-    top: -12px;
-    /*left: 0;*/
-}
-
 button.color {
     color: white;
     /*border: none;*/
@@ -112,9 +106,9 @@ button:not(:first-child) {
     margin-right: 1px;
 }
 
-dropping-block {
+.block.dropping {
     position: relative;
-    top: 0px;
+    transition: transform 1s;
 }
 
 #robot .block {
