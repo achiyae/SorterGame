@@ -13,9 +13,9 @@
 </head>
 <body>
 <div class="container">
-    <button class="green" onclick="move('green')"></button>
-    <button class="blue" onclick="move('blue')"></button>
-    <button class="red" onclick="move('red')"></button>
+    <button class="color green" onclick="move('green')"></button>
+    <button class="color blue" onclick="move('blue')"></button>
+    <button class="color red" onclick="move('red')"></button>
     <div id="bowel">
         <div id="robot">
             <div id="robotic-arm"></div>
@@ -113,10 +113,9 @@
             </div>
         </fieldset>
         <br/>
-        <fieldset>
-            <input type="checkbox" id="magnetErrors" onchange="magnetErrors = this.checked">
-            <label for="magnetErrors">Random magnet failures</label><br/>
-        </fieldset>
+        <div>
+            <button class="failure" onclick="magnetErrors=true">Magnet failure</button>
+        </div>
     </div>
     <div class="side-panel hide">
         <h2>Debug</h2>

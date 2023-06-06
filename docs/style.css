@@ -82,7 +82,7 @@
     /*left: 0;*/
 }
 
-button {
+button.color {
     color: white;
     /*border: none;*/
     margin: 10px;
@@ -171,4 +171,17 @@ button:not(:first-child) {
     float: left;
     text-align: right;
     margin-right: 2px;
+}
+
+button.failure {
+    background-color: darkorange;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    letter-spacing: 2px;
 }
