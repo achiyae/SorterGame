@@ -77,16 +77,16 @@ function updateRobotEngine(tween) {
 
 function updateRobotMagnet(v) {
     if (v == null) {
-        if (magnetErrors && $('#robot-value-magnet').text() === 'On') {
-            if (Math.random() < 0.01) {
-                // console.log('Magnet error')
+        if (magnetErrors) {
+            if ($('#robot-value-magnet').text() === 'On') {
                 $('#robot-value-magnet').text('Off').css("background-color", 'transparent')
                 setTimeout(() => {
                     if ($('#robot-block').css("background-color") !== TRANSPARENT) {
                         $('#robot-value-magnet').text('On').css("background-color", '#51EF51FF')
                     }
-                }, 100)
+                }, 200)
             }
+            magnetErrors = false
         }
         return
     }
@@ -296,7 +296,7 @@ function findColor(baseQueue, color, startFromBowel) {
                 }
             },
             complete: function () {
-                if(first.length === 0) {
+                if (first.length === 0) {
                     hitTheWall(baseQueue)
                 }
             }
