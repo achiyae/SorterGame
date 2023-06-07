@@ -75,7 +75,7 @@ function updateRobotEngine(tween) {
     $('#robot-value-motor-v').text(v)
 }
 
-function dropBlock(currentQueue) {
+function dropBlock(baseQueue) {
     $('#robot').stop(true)
     let color = $('#robot-block').attr('class').substring(6)
     if (color !== 'transparent') {
@@ -101,6 +101,7 @@ function dropBlock(currentQueue) {
         )
         block.dequeue(queue)
     }
+    goToBowel(baseQueue)
 }
 
 function updateRobotMagnet(v, currentQueue) {
