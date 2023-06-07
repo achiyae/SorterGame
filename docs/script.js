@@ -81,24 +81,32 @@ function dropBlock(currentQueue) {
     if (color !== 'transparent') {
         let queue = Math.random() + '-dropBlock'
         let block = $('<div class="block dropping"></div>')
-        block.addClass(color).removeClass('transparent')
-        $('#robot').append(block)
-        let distance = $('.container').offset().top + $('.container').height() - $('.block.dropping').offset().top + 30
+        block.addClass(color)
+        block.css({
+            'position':'relative',
+        })
+        $('#bowel').append(block)
+        block.offset($('#robot-block').offset())
+        let distance = $('.container').offset().top + $('.container').height() - block.offset().top + 30
         $('#robot-block').removeClass(color).addClass('transparent')
-        $('.block.dropping').animate(
+        block.animate(
             animateKeyframe(true, null, distance),
             {
                 queue: queue,
-                duration: DURATION
+                duration: DURATION,
+                always: () => {
+                    // block.css('position', 'absolute')
+                }
             }
         )
-        $('.block.dropping').dequeue(queue)
+        block.dequeue(queue)
     }
 }
 
 function updateRobotMagnet(v, currentQueue) {
     if (v == null) {
         if (magnetErrors) {
+            magnetErrors = false
             if ($('#robot-value-magnet').text() === 'On') {
                 $('#robot-value-magnet').text('Off').css('background-color', 'transparent')
                 dropBlock(currentQueue)
@@ -108,7 +116,6 @@ function updateRobotMagnet(v, currentQueue) {
                     }
                 }, 200)
             }
-            magnetErrors = false
         }
         return
     }
