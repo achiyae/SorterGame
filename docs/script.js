@@ -8,6 +8,13 @@ let enableSensorErrors = false
 let magnetErrors = false
 let findColorMalfunctionCode = 0
 
+function magnetFailure() {
+    magnetErrors = true
+    setTimeout(() => {
+        magnetErrors = false
+    }, 100)
+}
+
 function addNoiseToRGB(rgb, noiseRange = 100) {
     if (rgb === 'red') {
         rgb = RED
@@ -75,7 +82,7 @@ function updateRobotEngine(tween) {
     $('#robot-value-motor-v').text(v)
 }
 
-function dropBlock(baseQueue) {
+function dropBlock() {
     $('#robot').stop(true)
     let color = $('#robot-block').attr('class').substring(6)
     if (color !== 'transparent') {
@@ -83,7 +90,7 @@ function dropBlock(baseQueue) {
         let block = $('<div class="block dropping"></div>')
         block.addClass(color)
         block.css({
-            'position':'relative',
+            'position': 'relative',
         })
         $('#bowel').append(block)
         block.offset($('#robot-block').offset())
@@ -94,23 +101,19 @@ function dropBlock(baseQueue) {
             {
                 queue: queue,
                 duration: DURATION,
-                always: () => {
-                    // block.css('position', 'absolute')
-                }
             }
         )
         block.dequeue(queue)
     }
-    goToBowel(baseQueue)
+    goToBowel()
 }
 
-function updateRobotMagnet(v, currentQueue) {
+function updateRobotMagnet(v) {
     if (v == null) {
         if (magnetErrors) {
-            magnetErrors = false
             if ($('#robot-value-magnet').text() === 'On') {
                 $('#robot-value-magnet').text('Off').css('background-color', 'transparent')
-                dropBlock(currentQueue)
+                dropBlock()
                 setTimeout(() => {
                     if ($('#robot-block').css('background-color') !== TRANSPARENT) {
                         $('#robot-value-magnet').text('On').css('background-color', '#51EF51FF')
@@ -160,36 +163,6 @@ function findColorMalfunction(baseQueue, robot, color) {
         findColorMalfunctionGreen(baseQueue, robot, color)
     } else if (sensorsError === 'noise') {
         findColorMalfunctionNoise(baseQueue, robot, color)
-    }
-}
-
-function updateRobotSensorsPile(robot) {
-    let redPile = $('.pile.red-b:first')
-    let greenPile = $('.pile.green-b:first')
-    let bluePile = $('.pile.blue-b:first')
-
-    if (robot.offset().left >= redPile.offset().left && robot.offset().left <= redPile.offset().left + redPile.width()) {
-
-    }
-}
-
-function verboseSensor() {
-    let robot = $('#robot')
-    let belowRobotLocation = {
-        top: Math.floor(robot.offset().top + robot.height() + 4),
-        left: Math.floor(robot.offset().left + robot.width() / 2) //robot center
-    }
-    let belowRobotElements = document.elementsFromPoint(belowRobotLocation.left, belowRobotLocation.top)
-        .filter(e => (e.className && (e.className.includes('block') || e.className.includes('pile'))))
-    if (belowRobotElements.length > 0) {
-        if (belowRobotElements[0].className.includes('pile')) {
-            // console.log(belowRobotElements[belowRobotElements.length - 1])
-            let color = belowRobotElements[belowRobotElements.length - 1].className.split(' ')[1].split('-')[0]
-            // console.log(color)
-        }
-        robot.stop(true)
-        // console.log(belowRobotElements.map(e => e.backgroundColor))
-        throw new Error('Robot is on top of a block')
     }
 }
 
@@ -393,7 +366,6 @@ function goToPile(baseQueue, color, alwaysGreenCheck) {
     let queue = baseQueue + 'goToPile'
     let pile = $('.pile.' + color + '-b:first')
     let robot = $('#robot')
-    let currentLocation = $('#robot').offset()
     let bowel = $('#bowel')
     let lastTransparentBlock = pile.find('.pile-block.transparent:first')
 
