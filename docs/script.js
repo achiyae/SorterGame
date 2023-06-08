@@ -90,7 +90,7 @@ function dropBlock() {
         let block = $('<div class="block dropping"></div>')
         block.addClass(color)
         block.css({
-            'position': 'relative',
+            'position': 'absolute',
         })
         $('#bowel').append(block)
         block.offset($('#robot-block').offset())
@@ -320,9 +320,8 @@ function findColor(baseQueue, color, startFromBowel) {
 
 function pickUp(baseQueue, color) {
     updateRobotMagnet(true)
-    $('.block.bowel.' + color + ':first').removeClass(color).removeClass('bowel').addClass('transparent')
+    $('.block.bowel.' + color + ':first').removeClass(color).removeClass('bowel').addClass('hide');
     $('#robot-block').removeClass('transparent').addClass(color)
-
     goToPile(baseQueue, color)
 }
 
