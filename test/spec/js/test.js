@@ -5,24 +5,40 @@
 
 // ANALYZE:   .\provengo.bat analyze -f pdf --style full test
 // RUN:       .\provengo.bat run --show-sessions test
+// REPORT:    .\provengo.bat report -t testlog test
 
-/*bthread('Click red and check that counter is incremented', function () {
+//region Test 1a.
+/*bthread('Click blue and check that counter is incremented', function () {
   let s = getSession().start(URL)
-  verifyCounter(s, 'red', 0)
-  press(s, 'red')
-  verifyCounter(s, 'red', 1)
+  verifyCounter(s, 'blue', 0)
+  press(s, 'blue')
+  verifyCounter(s, 'blue', 1)
 })*/
+//endregion
 
-/*bthread('Click red 3 times and check that counter is incremented', function () {
+//region Test 1b.
+/*bthread('Click blue and check that counter is incremented', function () {
   let s = getSession().start(URL)
-  verifyCounter(s, 'red', 0)
+  verifyCounter(s, 'blue', 0)
+  press(s, 'blue')
+  sleep(5000)
+  verifyCounter(s, 'blue', 1)
+})*/
+//endregion
+
+//region Test 1c.
+bthread('Click blue 3 times and check that counter is incremented', function () {
+  let s = getSession().start(URL)
+  verifyCounter(s, 'blue', 0)
   for (let i = 0; i < 3; i++) {
-    press(s, 'red')
-    verifyCounter(s, 'red', i+1)
+    press(s, 'blue')
+    sleep(5000)
+    verifyCounter(s, 'blue', i+1)
   }
-})*/
+})
+//endregion
 
-bthread('Start session', function () {
+/*bthread('Start session', function () {
   getSession().start(URL)
 })
 for(let color of ['red', 'green', 'blue'] ) {
@@ -34,7 +50,7 @@ for(let color of ['red', 'green', 'blue'] ) {
       verifyCounter(s, color, i+1)
     }
   })
-}
+}*/
 
 /*story('Block red after the first press', function () {
   waitFor(any(/^Press/)) // wait for any event whose name starts with "Press"

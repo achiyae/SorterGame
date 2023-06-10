@@ -3,3 +3,4 @@
  */
 
 const URL = java.nio.file.Paths.get("docs/index.html").toUri().toString();
+// const URL = 'https://achiyae.github.io/SorterGame/'

@@ -3,8 +3,12 @@
 
 function press(session, color) {
     request(Event('Press', {color: color}))
-    session.click('//button[@class="' + color + '"]')
-    Ctrl.doSleep(5000)
+    session.click('//button[@class="color ' + color + '"]')
+}
+
+function magnetFailure(session, color) {
+    request(Event('MagnetFailure'))
+    session.click('//button[@class="failure"]')
 }
 
 function verifyCounter(session, color, count) {
