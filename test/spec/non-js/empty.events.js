@@ -1,17 +1,20 @@
 // @provengo summon selenium
 // @provengo summon ctrl
 
-defineEvent(SeleniumSession, 'Press', function (session, event) {
-})
+function press(color) {
+  request(Event('Press', {color: color}))
+}
 
-defineEvent(SeleniumSession, 'VerifyCounter', function (session, event) {
-  with (session) {
-    assertText('//div[@id="' + event.color + '-counter"]', event.count)
-  }
-})
+function magnetFailure(color) {
+  request(Event('MagnetFailure'))
+}
+
+function verifyCounter(color, count) {
+  request(Event('VerifyCounter', {color: color, count: count}))
+}
 
 function pause() {
-  Ctrl.doPause(millis)
+  Ctrl.doPause()
 }
 
 function sleep(millis) {

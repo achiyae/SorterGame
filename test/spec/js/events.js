@@ -1,23 +1,24 @@
 // @provengo summon selenium
 // @provengo summon ctrl
 
-function press(session, color) {
+function press(color) {
     request(Event('Press', {color: color}))
     session.click('//button[@class="color ' + color + '"]')
 }
 
-function magnetFailure(session, color) {
+function magnetFailure(color) {
     request(Event('MagnetFailure'))
     session.click('//button[@class="failure"]')
 }
 
-function verifyCounter(session, color, count) {
+function verifyCounter(color, count) {
   request(Event('VerifyCounter', {color: color, count: count}))
   session.assertText('//div[@id="' + color + '-counter"]', count)
 }
 
-function getSession() {
-  return new SeleniumSession('S')
+function waitForCounter(color, count) {
+  request(Event('VerifyCounter', {color: color, count: count}))
+  session.assertText('//div[@id="' + color + '-counter"]', count)
 }
 
 function pause() {
