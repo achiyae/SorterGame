@@ -32,3 +32,7 @@ defineEvent(SeleniumSession, "ChooseNoiseMalfunction", function (session, event)
 let dropMagnetMalfunction;
 defineEvent(SeleniumSession, "DropMagnetMalfunction", function (session, event) {
 })
+
+let waitForMagnetOn;
+defineEvent(SeleniumSession, "WaitForMagnetOn", function (session, event) {
+})

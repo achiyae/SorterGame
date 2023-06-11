@@ -40,3 +40,8 @@ let dropMagnetMalfunction;
 defineEvent(SeleniumSession, "DropMagnetMalfunction", function (session, event) {
     session.click('//button[@id="drop-magnet"]')
 })
+
+let waitForMagnetOn;
+defineEvent(SeleniumSession, "waitForMagnetOn", function (session, event) {
+    session.waitForVisibility('//p[@id="robot-value-magnet" and text()="On"]', 6000)
+})
