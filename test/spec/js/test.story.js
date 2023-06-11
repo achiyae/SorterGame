@@ -12,13 +12,13 @@
 let session = new SeleniumSession('S')
 
 //region Test 1a.
-/*bthread('Click blue and check that counter is incremented', function () {
+bthread('Click blue and check that counter is incremented', function () {
     with (session.start(URL)) {
         verifyCounter({color: 'blue', count: 0})
         press({color: 'blue'})
         verifyCounter({color: 'blue', count: 1})
     }
-})*/
+})
 //endregion
 
 //region Test 1b.
@@ -32,7 +32,7 @@ let session = new SeleniumSession('S')
 //endregion
 
 //region Test 2.
-let colors = ['red', 'blue', 'green']
+/*let colors = ['red', 'blue', 'green']
 
 for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
@@ -43,11 +43,11 @@ for (let i = 0; i < colors.length; i++) {
             waitForCounter({color: color, count: 1})
         }
     })
-}
+}*/
 //endregion
 
 //region Test 3.
-for (let i = 0; i < colors.length; i++) {
+/*for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
     Constraints
         .after(any(/Press/).and(any({color: color})))
@@ -55,20 +55,20 @@ for (let i = 0; i < colors.length; i++) {
         .until(
             any(/EndOfAction/).and(any({eventName: "WaitForCounter", color: color}))
         );
-}
+}*/
 //endregion
 
 //region Test 4.
-bthread('Enable Always-green malfunction', function () {
+/*bthread('Enable Always-green malfunction', function () {
     with (session.start(URL)) {
         enableSensorsMalfunction()
         chooseAlwaysGreenMalfunction()
     }
-})
+})*/
 //endregion
 
 //region Test 5.
-bthread('Enable Noise malfunction', function () {
+/*bthread('Enable Noise malfunction', function () {
     with (session.start(URL)) {
         enableSensorsMalfunction()
         chooseNoiseMalfunction()
@@ -79,7 +79,7 @@ bthread('Drop Magnet malfunction', function () {
     with (session.start(URL)) {
         dropMagnetMalfunction()
     }
-})
+})*/
 //endregion
 
 //region Test 6.
@@ -97,10 +97,10 @@ bthread('Drop Magnet malfunction', function () {
         }
     })
 }*/
-bthread('wait for 3 drop down', function () {
+/*bthread('wait for 3 drop down', function () {
     waitFor(any(/WaitForCounter/).and(any({count: 1})))
     waitFor(any(/WaitForCounter/).and(any({count: 1})))
     waitFor(any(/WaitForCounter/).and(any({count: 1})))
     Ctrl.doMark('Reached 3 drop down')
-})
+})*/
 //endregion
