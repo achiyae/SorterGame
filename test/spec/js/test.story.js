@@ -10,13 +10,13 @@
 let session = new SeleniumSession('S')
 
 //region Test 1a.
-bthread('Click blue and check that counter is incremented', function () {
+/*bthread('Click blue and check that counter is incremented', function () {
     with (session.start(URL)) {
         verifyCounter({color: 'blue', count: 0})
         press({color: 'blue'})
         verifyCounter({color: 'blue', count: 1})
     }
-})
+})*/
 //endregion
 
 //region Test 1b.
@@ -30,7 +30,7 @@ bthread('Click blue and check that counter is incremented', function () {
 //endregion
 
 //region Test 2.
-/*let colors = ['red', 'blue', 'green']
+let colors = ['red', 'blue', 'green']
 
 for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
@@ -41,11 +41,19 @@ for (let i = 0; i < colors.length; i++) {
             waitForCounter({color: color, count: 1})
         }
     })
-}*/
+}
 //endregion
 
 //region Test 3.
-// Constraints.after(any(/Press/)).block(any(/Press/)).until(any(/WaitForCounter/));
+for (let i = 0; i < colors.length; i++) {
+    let color = colors[i]
+    Constraints
+        .after(any(/Press/).and(any({color: color})))
+        .block(any(/Press/))
+        .until(
+            any(/EndOfAction/).and(any({eventName: "WaitForCounter", color: color}))
+        );
+}
 //endregion
 
 
