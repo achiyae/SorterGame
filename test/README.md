@@ -15,7 +15,7 @@ Provengo project for spec-ing and testing my system.
     * [hooks](config/hooks) Hook scripts (pre/post/...)
 * [spec](spec) The code creating the specification space lives here. Organized by language.
     * [js](spec/js) JavaScript files
-      * [test.js](spec/js/hello-world.js) Initial model file.
+      * [test.story.js](spec/js/hello-world.js) Initial model file.
 * [meta-spec](meta-spec) Code for working with the specification space
     * [ensemble-code.js](meta-spec/ensemble-code.js) Sample code for generating test optimized test suites (ensembles)
     * [book-writer.js](meta-spec/book-writer.js) Sample code for generating test books

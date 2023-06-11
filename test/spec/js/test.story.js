@@ -10,46 +10,44 @@
 let session = new SeleniumSession('S')
 
 //region Test 1a.
-/*bthread('Click blue and check that counter is incremented', function () {
-    let s = session.start(URL)
-    verifyCounter('blue', 0)
-    press('blue')
-    verifyCounter('blue', 1)
-})*/
+bthread('Click blue and check that counter is incremented', function () {
+    with (session.start(URL)) {
+        verifyCounter({color: 'blue', count: 0})
+        press({color: 'blue'})
+        verifyCounter({color: 'blue', count: 1})
+    }
+})
 //endregion
 
 //region Test 1b.
-/*bthread('Click blue and check that counter is incremented', function () {
-    session.start(URL)
-    waitForCounter('blue', 0)
-    press('blue')
-    waitForCounter('blue', 1)
+/*bthread('Click blue and wait for counter to be incremented', function () {
+    with (session.start(URL)) {
+        waitForCounter({color: 'blue', count: 0})
+        press({color: 'blue'})
+        waitForCounter({color: 'blue', count: 1})
+    }
 })*/
 //endregion
 
 //region Test 2.
-let colors = ['red', 'blue', 'green']
+/*let colors = ['red', 'blue', 'green']
 
 for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
     bthread('Click ' + color + ' 3 times and check that counter is incremented', function () {
-        // let s = waitFor(any(/StartSession/))
-        session.start(URL)
-        waitForCounter('blue', 0)
-        press(color)
-        waitForCounter(color, 1)
+        with (session.start(URL)) {
+            waitForCounter({color: color, count: 0})
+            press({color: color})
+            waitForCounter({color: color, count: 1})
+        }
     })
-}
+}*/
 //endregion
 
 //region Test 3.
-
+// Constraints.after(any(/Press/)).block(any(/Press/)).until(any(/WaitForCounter/));
 //endregion
 
-/*story('Block red after the first press', function () {
-  waitFor(any(/^Press/)) // wait for any event whose name starts with "Press"
-  block(any(/PressRed/)) // block "choose" calls from selecting "Mars"
-})*/
 
 /*bthread('Mark Green', function () {
   waitFor(any('PressGreen'))

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+VERSION=$(grep version pom.xml | head -n2 | tail -n 1 | cut -d\> -f2 | cut -d\< -f1)
+UBERJAR=Provengo.uber.jar
+if [ ! -f $UBERJAR ]; then
+    echo Missing jar file $UBERJAR in the target directory
+    exit -2
+fi
+
+java -jar $UBERJAR "$@"
+
