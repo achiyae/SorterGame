@@ -11,17 +11,19 @@
 
 let session = new SeleniumSession('S')
 
-//region Test 1a.
-bthread('Click blue and check that counter is incremented', function () {
+//region Test 1a: Click blue and check that counter is incremented
+//*****************************************************************
+/*bthread('Click blue and check that counter is incremented', function () {
     with (session.start(URL)) {
         verifyCounter({color: 'blue', count: 0})
         press({color: 'blue'})
         verifyCounter({color: 'blue', count: 1})
     }
-})
+})*/
 //endregion
 
-//region Test 1b.
+//region Test 1b: Fix for 1a - wait for counter to be visible.
+//***********************************************************
 /*bthread('Click blue and wait for counter to be incremented', function () {
     with (session.start(URL)) {
         waitForCounter({color: 'blue', count: 0})
@@ -31,23 +33,25 @@ bthread('Click blue and check that counter is incremented', function () {
 })*/
 //endregion
 
-//region Test 2.
-/*let colors = ['red', 'blue', 'green']
+//region Test 2: Click all colors and check that counter is incremented
+//*********************************************************************
+let colors = ['red', 'blue', 'green']
 
 for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
-    bthread('Click ' + color + ' 3 times and check that counter is incremented', function () {
+    bthread('Click ' + color + ' check that counter is incremented', function () {
         with (session.start(URL)) {
             waitForCounter({color: color, count: 0})
             press({color: color})
             waitForCounter({color: color, count: 1})
         }
     })
-}*/
+}
 //endregion
 
-//region Test 3.
-/*for (let i = 0; i < colors.length; i++) {
+//region Test 3: Add constraint - after pressing, block another press until counter is incremented
+//************************************************************************************************
+for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
     Constraints
         .after(any(/Press/).and(any({color: color})))
@@ -55,10 +59,11 @@ for (let i = 0; i < colors.length; i++) {
         .until(
             any(/EndOfAction/).and(any({eventName: "WaitForCounter", color: color}))
         );
-}*/
+}
 //endregion
 
-//region Test 4.
+//region Test 4: Add malfunction - sensor 1 is always green
+//*********************************************************
 /*bthread('Enable Always-green malfunction', function () {
     with (session.start(URL)) {
         enableSensorsMalfunction()
@@ -67,7 +72,8 @@ for (let i = 0; i < colors.length; i++) {
 })*/
 //endregion
 
-//region Test 5.
+//region Test 5: Add malfunction - Sensors are noisy
+//*************************************************
 /*bthread('Enable Noise malfunction', function () {
     with (session.start(URL)) {
         enableSensorsMalfunction()
@@ -82,7 +88,8 @@ bthread('Drop Magnet malfunction', function () {
 })*/
 //endregion
 
-//region Test 6.
+//region Test 6: Add goals for generating test suites
+//***************************************************
 // Mark goals for ensemble
 /*for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
