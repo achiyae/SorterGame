@@ -18,13 +18,9 @@ function verifyCounter(color, count) {
 
 function waitForCounter(color, count) {
   request(Event('VerifyCounter', {color: color, count: count}))
-  session.assertText('//div[@id="' + color + '-counter"]', count)
+  session.waitForVisibility('//div[@id="' + color + '-counter" and text()="'+count+'"]')
 }
 
 function pause() {
   Ctrl.doPause()
-}
-
-function sleep(millis) {
-  Ctrl.doSleep(millis)
 }

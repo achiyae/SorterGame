@@ -19,31 +19,31 @@ let session = new SeleniumSession('S')
 //endregion
 
 //region Test 1b.
-bthread('Click blue and check that counter is incremented', function () {
+/*bthread('Click blue and check that counter is incremented', function () {
     session.start(URL)
-    verifyCounter('blue', 0)
+    waitForCounter('blue', 0)
     press('blue')
     waitForCounter('blue', 1)
-})
+})*/
 //endregion
 
-//region Test 2a.
-/*bthread('Start session', function () {
-    session.start(URL)
-})*/
+//region Test 2.
+let colors = ['red', 'blue', 'green']
 
-/*let colors = ['red', 'blue', 'green']
 for (let i = 0; i < colors.length; i++) {
     let color = colors[i]
     bthread('Click ' + color + ' 3 times and check that counter is incremented', function () {
         // let s = waitFor(any(/StartSession/))
         session.start(URL)
-        verifyCounter(color, 0)
+        waitForCounter('blue', 0)
         press(color)
-        sleep(5000)
-        verifyCounter(color, 1)
+        waitForCounter(color, 1)
     })
-}*/
+}
+//endregion
+
+//region Test 3.
+
 //endregion
 
 /*story('Block red after the first press', function () {

@@ -381,7 +381,6 @@ function goToPile(baseQueue, color, alwaysGreenCheck) {
                 putDown(baseQueue, lastTransparentBlock, color, alwaysGreenCheck)
             }
         }]
-    console.log(pileLocations)
     for (let i = 0; i < pileLocations.length; i++) {
         let location = pileLocations[i]
         robot.animate(animateKeyframe(true, location.left, location.top), animateOptions(location.left, location.top, options[i]))

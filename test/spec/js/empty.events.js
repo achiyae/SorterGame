@@ -13,10 +13,10 @@ function verifyCounter(color, count) {
   request(Event('VerifyCounter', {color: color, count: count}))
 }
 
-function pause() {
-  Ctrl.doPause()
+function waitForCounter(color, count) {
+  request(Event('VerifyCounter', {color: color, count: count}))
 }
 
-function sleep(millis) {
-  Ctrl.doSleep(millis)
+function pause() {
+  Ctrl.doPause()
 }
