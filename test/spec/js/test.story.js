@@ -56,26 +56,26 @@ for (let i = 0; i < colors.length; i++) {
 }
 //endregion
 
+//region Test 4.
+bthread('Enable Always-green malfunction', function () {
+    with (session.start(URL)) {
+        enableSensorsMalfunction()
+        chooseAlwaysGreenMalfunction()
+    }
+})
+//endregion
 
-/*bthread('Mark Green', function () {
-  waitFor(any('PressGreen'))
-  Ctrl.doMark('Green Path!')
-})*/
+//region Test 5.
+bthread('Enable Noise malfunction', function () {
+    with (session.start(URL)) {
+        enableSensorsMalfunction()
+        chooseNoiseMalfunction()
+    }
+})
 
-/**
- * (advanced)
- * Uncomment to create the following general requirement:
- *  It should not be possible to say "Hi, Venus". If a scenario allows this, complain informatively.
- */
-//bthread("Hi Venus is a spec error", function(){
-//    waitFor(bp.Event("Hi, Venus"));
-//    bp.ASSERT(false, "Spec Error: Saying 'Hi' to Venus should not be possible");
-//});
-
-/**
- * Block saying "Hi" to Venus.
- * Un-comment to ensure no scenario violates the above requirement.
- */
-// Constraints.after(choiceEvent("Hi"))
-//     .block(choiceEvent("Venus"))
-//     .forever();
+bthread('Drop Magnet malfunction', function () {
+    with (session.start(URL)) {
+        dropMagnetMalfunction()
+    }
+})
+//endregion

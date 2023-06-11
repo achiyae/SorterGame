@@ -18,9 +18,25 @@ defineEvent(SeleniumSession, "VerifyCounter", function (session, event) {
 
 let waitForCounter;
 defineEvent(SeleniumSession, "WaitForCounter", function (session, event) {
-    session.waitForVisibility('//div[@id="' + event.color + '-counter" and text()="' + event.count + '"]')
+    session.waitForVisibility('//div[@id="' + event.color + '-counter" and text()="' + event.count + '"]', 6000)
 })
 
-function pause() {
-    Ctrl.doPause()
-}
+let enableSensorsMalfunction;
+defineEvent(SeleniumSession, "EnableSensorsMalfunction", function (session, event) {
+    session.click('//input[@id="disableSensorsRadios"]')
+})
+
+let chooseAlwaysGreenMalfunction;
+defineEvent(SeleniumSession, "ChooseAlwaysGreenMalfunction", function (session, event) {
+    session.click('//input[@id="always-green"]')
+})
+
+let chooseNoiseMalfunction;
+defineEvent(SeleniumSession, "ChooseNoiseMalfunction", function (session, event) {
+    session.click('//input[@id="noise"]')
+})
+
+let dropMagnetMalfunction;
+defineEvent(SeleniumSession, "DropMagnetMalfunction", function (session, event) {
+    session.click('//button[@id="drop-magnet"]')
+})

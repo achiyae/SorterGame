@@ -17,6 +17,18 @@ let waitForCounter;
 defineEvent(SeleniumSession, "WaitForCounter", function (session, event) {
 })
 
-function pause() {
-    Ctrl.doPause()
-}
+let enableSensorsMalfunction;
+defineEvent(SeleniumSession, "EnableSensorsMalfunction", function (session, event) {
+})
+
+let chooseAlwaysGreenMalfunction;
+defineEvent(SeleniumSession, "ChooseAlwaysGreenMalfunction", function (session, event) {
+})
+
+let chooseNoiseMalfunction;
+defineEvent(SeleniumSession, "ChooseNoiseMalfunction", function (session, event) {
+})
+
+let dropMagnetMalfunction;
+defineEvent(SeleniumSession, "DropMagnetMalfunction", function (session, event) {
+})
