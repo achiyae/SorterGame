@@ -8,6 +8,15 @@ let enableSensorErrors = false
 let magnetErrors = false
 let findColorMalfunctionCode = 0
 
+
+function toggleDebug() {
+    if($('#debug-data').attr('hidden')=='hidden'){
+        $('#debug-data').removeAttr('hidden')
+    } else {
+        $('#debug-data').attr('hidden','hidden')
+    }
+}
+
 function magnetFailure() {
     magnetErrors = true
     setTimeout(() => {

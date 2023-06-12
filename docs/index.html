@@ -64,6 +64,36 @@
     </div>
 </div>
 <div class="container equipment">
+    <div class="side-panel" onclick="toggleDebug()">
+        <h2>Debug</h2>
+        <div id="debug-data" hidden>
+            <table>
+                <tr>
+                    <td>X:</td>
+                    <td id="robot-value-x">-</td>
+                </tr>
+                <tr>
+                    <td>Y:</td>
+                    <td id="robot-value-y">-</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div style="width: 20px;"></div>
+    <div class="side-panel">
+        <h2>Sensors</h2>
+        <table>
+            <tr>
+                <td>Color 1:</td>
+                <td><p id='robot-color-1' class="block transparent" style="border: black 1px solid"></p></td>
+            </tr>
+            <tr>
+                <td>Color 2:</td>
+                <td><p id='robot-color-2' class="block transparent" style="border: black 1px solid"></p></td>
+            </tr>
+        </table>
+    </div>
+    <div style="width: 20px;"></div>
     <div class="side-panel">
         <h2>Actuators</h2>
         <table>
@@ -79,20 +109,6 @@
             <tr>
                 <td>V-Motor:</td>
                 <td><span id="robot-value-motor-v">0</span> cm/sec</td>
-            </tr>
-        </table>
-    </div>
-    <div style="width: 20px;"></div>
-    <div class="side-panel">
-        <h2>Sensors</h2>
-        <table>
-            <tr>
-                <td>Color 1:</td>
-                <td><p id='robot-color-1' class="block transparent" style="border: black 1px solid"></p></td>
-            </tr>
-            <tr>
-                <td>Color 2:</td>
-                <td><p id='robot-color-2' class="block transparent" style="border: black 1px solid"></p></td>
             </tr>
         </table>
     </div>
@@ -115,19 +131,6 @@
         <div>
             <button id="drop-magnet" class="failure" onclick="magnetFailure()">Magnet failure</button>
         </div>
-    </div>
-    <div class="side-panel" hidden>
-        <h2>Debug</h2>
-        <table>
-            <tr>
-                <td style="min-width: 77px">Location X:</td>
-                <td id="robot-value-x">-</td>
-            </tr>
-            <tr>
-                <td>Location Y:</td>
-                <td id="robot-value-y">-</td>
-            </tr>
-        </table>
     </div>
 </div>
 </body>

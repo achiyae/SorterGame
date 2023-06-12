@@ -149,7 +149,7 @@ button:not(:first-child) {
 
 .side-panel {
     /*min-width: 140px;*/
-    min-height: 110px;
+    /*min-height: 110px;*/
     align-items: center;
     padding: 20px;
     background-color: #f2f2f2;
