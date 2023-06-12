@@ -64,17 +64,17 @@ for (let i = 0; i < colors.length; i++) {
 
 //region Test 4: Add malfunction - sensor 1 is always green
 //*********************************************************
-/*bthread('Enable Always-green malfunction', function () {
+bthread('Enable Always-green malfunction', function () {
     with (session.start(URL)) {
         enableSensorsMalfunction()
         chooseAlwaysGreenMalfunction()
     }
-})*/
+})
 //endregion
 
 //region Test 5: Add malfunction - Sensors are noisy
 //*************************************************
-/*bthread('Enable Noise malfunction', function () {
+bthread('Enable Noise malfunction', function () {
     with (session.start(URL)) {
         enableSensorsMalfunction()
         chooseNoiseMalfunction()
@@ -85,29 +85,36 @@ bthread('Drop Magnet malfunction', function () {
     with (session.start(URL)) {
         dropMagnetMalfunction()
     }
-})*/
+})
 //endregion
 
-//region Test 6: Add goals for generating test suites
-//***************************************************
-// Mark goals for ensemble
-/*for (let i = 0; i < colors.length; i++) {
-    let color = colors[i]
-    bthread('magnet failed after picking up', function () {
-        with (session.start(URL)) {
-            waitForMagnetOn()
-            let e = waitFor(any(/DropMagnetMalfunction/)
-                .or(any(/EndOfAction/).and(any({eventName: "WaitForCounter", color: color}))))
-            if (e.name=='DropMagnetMalfunction') {
-                Ctrl.doMark('magnet-failed-path')
-            }
-        }
-    })
-}*/
-/*bthread('wait for 3 drop down', function () {
+//region Test 6: Add goal for test-suite generation: Reach 3 drop down
+//********************************************************************
+bthread('wait for 3 drop down', function () {
     waitFor(any(/WaitForCounter/).and(any({count: 1})))
     waitFor(any(/WaitForCounter/).and(any({count: 1})))
     waitFor(any(/WaitForCounter/).and(any({count: 1})))
     Ctrl.doMark('Reached 3 drop down')
-})*/
+})
+//endregion
+
+//region Test 7: Add goal for test-suite generation: Drop magnet after picking up
+//********************************************************************************
+for (let i = 0; i < colors.length; i++) {
+    let color = colors[i]
+    bthread('magnet failed after picking up', function () {
+        waitFor(any(/Press/))
+        inParallel(
+            function() {
+                session.waitForMagnetOn()
+            },
+            function () {
+                let e = waitFor(any(/DropMagnetMalfunction/)
+                    .or(any(/EndOfAction/).and(any({eventName: "WaitForCounter", color: color}))))
+                if (e.name == 'DropMagnetMalfunction') {
+                    Ctrl.doMark('magnet-failed-path')
+                }
+            })
+    })
+}
 //endregion

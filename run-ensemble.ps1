@@ -3,7 +3,7 @@ Move-Item -Force -Path .\test\spec\non-js\events.js -Destination .\test\spec\js\
 
 if($IsWindows)
 {
-    .\provengo.bat sample --delete-previous --size 500 test
+    .\provengo.bat run -s products/run-source/ensemble.json test
 } else {
-    ./provengo sample --delete-previous --size 500 test
+    ./provengo run -s products/run-source/ensemble.json test
 }
