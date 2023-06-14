@@ -2,35 +2,37 @@
 // @provengo summon constraints
 // @provengo summon selenium
 
-
+//region Execution instructions
 // ANALYZE:   .\provengo.bat analyze -f pdf --style full test
 // RUN:       .\provengo.bat run --show-sessions test
 // REPORT:    .\provengo.bat report -t testlog test
 // SAMPLE:    .\provengo.bat sample test
 // ENSEMBLE:    .\provengo.bat ensemble test
+//endregion
 
 let session = new SeleniumSession('S')
 
 //region Test 1a: Click blue and check that counter is incremented
 //*****************************************************************
-bthread('Click blue and check that counter is incremented', function () {
+/*bthread('Click blue and check that counter is incremented', function () {
     with (session.start(URL)) {
         verifyCounter({color: 'blue', count: 0})
         press({color: 'blue'})
         verifyCounter({color: 'blue', count: 1})
     }
-})
+})*/
 //endregion
+
 
 //region Test 1b: Fix for 1a - wait for counter to be visible.
 //***********************************************************
-/*bthread('Click blue and wait for counter to be incremented', function () {
+bthread('Click blue and wait for counter to be incremented', function () {
     with (session.start(URL)) {
         waitForCounter({color: 'blue', count: 0})
         press({color: 'blue'})
         waitForCounter({color: 'blue', count: 1})
     }
-})*/
+})
 //endregion
 
 //region Test 2: Click all colors and check that counter is incremented
